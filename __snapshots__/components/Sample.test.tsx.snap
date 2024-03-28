@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`スナップショットテスト 1`] = `
+<div>
+  <div>
+    <h1>
+      Hello, 
+      Anonymous
+    </h1>
+    <button>
+      ユーザー名取得
+    </button>
+  </div>
+</div>
+`;
