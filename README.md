@@ -40,3 +40,18 @@ src/
 └── types           # TypeScriptの型定義ファイル
 
 ```
+
+## 主要ライブラリ
+
+- 状態管理
+  - `Zustand`
+- ルーティング
+  - `React Router` or `Tanstack Router`(未定)
+- スタイリング
+  - (未定)
+- データフェッチ
+  - （未定）
+- フォーム
+  - `React Hook Form` \* `Zod`
+- テスト
+  - `vitest`
