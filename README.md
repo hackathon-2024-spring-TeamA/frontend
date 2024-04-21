@@ -16,6 +16,14 @@ nodeに特化したバージョン管理が良ければ`volta`がお勧め。
 
 パッケージ管理は`pnpm`を使用しています
 
+## プロジェクトの立ち上げ(仮想環境)
+
+1. `git clone git@github.com:hackathon-2024-spring-TeamA/frontend.git`
+2. `cd frontend`
+3. `pnpm install`
+4. `pnpm run dev`
+   1. `http://localhost:5173/`に接続して画面が表示されればOK
+
 ## ディレクトリ構成
 
 ```ディレクトリ構成
@@ -32,4 +40,3 @@ src/
 └── types           # TypeScriptの型定義ファイル
 
 ```
-# front
