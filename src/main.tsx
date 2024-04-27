@@ -5,8 +5,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
-import router from "./routes/router.tsx";
-import theme from "./styles/theme.ts";
+import router from "./router.tsx";
+import theme from "./theme.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
