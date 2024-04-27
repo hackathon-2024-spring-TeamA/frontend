@@ -8,9 +8,9 @@
 ## バージョン管理
 
 【node --version -> v21.7.1】
-`asdf`で管理していますが、`volta`, `nvm`, `nodenv`好きなのを使用してください。
-pythonなど、他のバージョンも一括で管理したい場合は`asdf`。
-nodeに特化したバージョン管理が良ければ`volta`がお勧め。
+`asdf`で管理していますが、`volta`, `nvm`, `nodenv`好きなのを使用してください
+pythonなど、他のバージョンも一括で管理したい場合は`asdf`
+nodeに特化したバージョン管理が良ければ`volta`がお勧め
 
 【パッケージ管理 -> pnpm】
 
@@ -46,12 +46,12 @@ src/
 - 状態管理
   - `Zustand`
 - ルーティング
-  - `React Router` or `Tanstack Router`(未定)
+  - `React Router V6`
 - スタイリング
-  - (未定)
+  - `MUI` + `vanilla extract`
 - データフェッチ
-  - （未定）
+  - `Apollo Client`
 - フォーム
-  - `React Hook Form` \* `Zod`
+  - `React Hook Form` + `Zod`
 - テスト
   - `vitest`
