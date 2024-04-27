@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-const About: React.FC = () => {
+const AboutPage: React.FC = () => {
   return (
     <>
       <Link to={"/"}>To Home Page</Link>
@@ -11,4 +11,4 @@ const About: React.FC = () => {
   );
 };
 
-export default About;
+export default AboutPage;
