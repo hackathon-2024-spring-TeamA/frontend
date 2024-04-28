@@ -9,6 +9,9 @@ const HomePage: React.FC = () => {
   const { count, increaseOne, removeAll } = useCountStore();
   return (
     <>
+      <Typography variant="h4" component="h1">
+        Home Page
+      </Typography>
       <Link to={"about"}>To About Page</Link>
       <p>This is the content of the homepage.</p>
       <Typography>{count}</Typography>
