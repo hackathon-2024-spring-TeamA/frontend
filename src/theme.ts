@@ -5,6 +5,23 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 const theme = createTheme({
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundImage: 'url("/src/assets/images/background_image.png")',
+          // backgroundSize: "cover",
+          backgroundPosition: "top-center",
+          backgroundRepeat: "no-repeat",
+          height: "100",
+          width: "100%",
+          position: "fixed",
+          top: 0,
+          left: 0,
+        },
+      },
+    },
+  },
   palette: {
     mode: "light",
     primary: {
