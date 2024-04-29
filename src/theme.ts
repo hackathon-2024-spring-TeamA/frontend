@@ -13,7 +13,7 @@ const theme = createTheme({
           // backgroundSize: "cover",
           backgroundPosition: "top-center",
           backgroundRepeat: "no-repeat",
-          height: "100",
+          height: "100%",
           width: "100%",
           position: "fixed",
           top: 0,
