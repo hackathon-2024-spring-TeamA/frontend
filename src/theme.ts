@@ -11,7 +11,7 @@ const theme = createTheme({
         body: {
           backgroundImage: 'url("/src/assets/images/background_image.png")',
           // backgroundSize: "cover",
-          backgroundPosition: "top-center",
+          // backgroundPosition: "top-left",
           backgroundRepeat: "no-repeat",
           height: "100%",
           width: "100%",

@@ -3,22 +3,22 @@ import React from "react";
 import { Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import { useCountStore } from "@/stores/store";
+import { useCountStore } from "@/stores/mock/mock_store";
 
-const HomePage: React.FC = () => {
+const AboutPage: React.FC = () => {
   const { count, increaseOne, removeAll } = useCountStore();
   return (
     <>
       <Typography variant="h4" component="h1">
-        Home Page
+        About Page
       </Typography>
-      <Link to={"about"}>To About Page</Link>
-      <p>This is the content of the homepage.</p>
+      <Link to={"/mock"}>To Home Page</Link>
+      <p>This is the content of the aboutpage.</p>
       <Typography>{count}</Typography>
       <Button onClick={increaseOne}>Increase One</Button>
-      <Button onClick={removeAll}>Remove AlL</Button>
+      <Button onClick={removeAll}>Remove ALL</Button>
     </>
   );
 };
 
-export default HomePage;
+export default AboutPage;
