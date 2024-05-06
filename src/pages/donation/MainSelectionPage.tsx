@@ -32,7 +32,7 @@ const MainSelectionPage: React.FC = () => {
             discription="カメラで本のバーコードをスキャンして本の検索を行います"
             imagePath="/src/assets/barcode-code-scan-svgrepo-com.svg"
             imageAlt="バーコード検索"
-            targetPath="donation/scan-barcode"
+            targetPath="/donation/scan-barcode"
           />
         </Grid>
       </Grid>
