@@ -8,8 +8,6 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 
 interface ActionAreaCardProps {
-  maxWidth?: number;
-  minWidth?: number;
   imagePath: string;
   imageAlt: string;
   title: string;
@@ -18,8 +16,6 @@ interface ActionAreaCardProps {
 }
 
 const ActionAreaCard: React.FC<ActionAreaCardProps> = ({
-  maxWidth = 300,
-  minWidth = 100,
   imagePath,
   imageAlt,
   title,
@@ -27,7 +23,17 @@ const ActionAreaCard: React.FC<ActionAreaCardProps> = ({
   targetPath,
 }) => {
   return (
-    <Card sx={{ maxWidth: maxWidth, minWidth: minWidth }}>
+    <Card
+      sx={{
+        widows: "100%",
+        height: "100%",
+        // width: { xs: "50%", md: "100%" },
+        // height: { xs: "50%", md: "100%" },
+        border: 2,
+        borderColor: "grey.700",
+        borderRadius: 4,
+      }}
+    >
       <Link to={targetPath} style={{ textDecoration: "none" }}>
         <CardActionArea>
           <CardMedia
@@ -36,12 +42,15 @@ const ActionAreaCard: React.FC<ActionAreaCardProps> = ({
             alt={imageAlt}
             sx={{
               objectFit: "contain",
-              widows: "100%",
-              height: "100%",
-              p: 2,
+              // widows: "100%",
+              // height: "100%",
+              width: { xs: "50%", md: "100%" },
+              height: "auto",
+              p: { xs: 1, md: 4 },
+              m: "auto",
             }}
           />
-          <CardContent sx={{ backgroundColor: "grey.700" }}>
+          <CardContent sx={{ backgroundColor: "grey.700", minHeight: "120px" }}>
             <Typography
               align="center"
               gutterBottom
