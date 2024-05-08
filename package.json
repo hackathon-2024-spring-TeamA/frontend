@@ -79,7 +79,15 @@
     "vitest": "^1.4.0"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix",
-    "*": "prettier --write --ignore-unknown"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   }
 }
