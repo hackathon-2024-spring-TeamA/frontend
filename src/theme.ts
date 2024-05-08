@@ -15,7 +15,7 @@ const theme = createTheme({
           backgroundRepeat: "no-repeat",
           height: "100%",
           width: "100%",
-          position: "fixed",
+          position: "relative", // fixed?
           top: 0,
           left: 0,
         },

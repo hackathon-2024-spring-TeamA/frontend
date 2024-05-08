@@ -37,7 +37,7 @@ const SampleCard: React.FC = () => {
   );
 };
 
-const MockCards: React.FC = () => {
+const MockCardsPage: React.FC = () => {
   return (
     <>
       <Link to={"/mock"}>To Home Page</Link>
@@ -71,4 +71,4 @@ const MockCards: React.FC = () => {
   );
 };
 
-export default MockCards;
+export default MockCardsPage;
