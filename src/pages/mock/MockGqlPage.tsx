@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Button, TextField } from "@mui/material";
 
-import { CREATE_USER } from "@/apollo/mutations";
+import { CREATE_USER } from "@/features/mock/mutations";
 
 const GqlPage: React.FC = () => {
   // ダミーデータ
