@@ -1,6 +1,6 @@
 # Frontend (React \* Vite)
 
-## 前提
+## 前提よ
 
 - `node`をインストールしていること
   - ターミナルで`node --version`を実行。（バージョンが表示されればOK）
