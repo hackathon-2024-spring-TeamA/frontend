@@ -12,6 +12,7 @@ import MockCardsPage from "./pages/mock/MockCardsPage";
 
 import MainLayout from "@/components/Layout/MainLayout";
 import MockAboutPage from "@/pages/mock/MockAboutPage";
+import MockGqlPage from "@/pages/mock/MockGqlPage";
 import MockHomePage from "@/pages/mock/MockHomePage";
 
 const router = createBrowserRouter(
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
         <Route index element={<MockHomePage />} />
         <Route path="about" element={<MockAboutPage />} />
         <Route path="cards" element={<MockCardsPage />} />
+        <Route path="gql" element={<MockGqlPage />} />
       </Route>
       ,
     </Route>,
