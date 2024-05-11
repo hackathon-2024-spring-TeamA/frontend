@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 
 import BarcodeScannerPage from "./pages/donation/BarcodeScannerPage";
+import DonationConfirmationPage from "./pages/donation/DonationConfirmationPage";
 import ImageUploadPage from "./pages/donation/ImageUploadPage";
 import ISBNInputPage from "./pages/donation/ISBNInputPage";
 import MainSelectionPage from "./pages/donation/MainSelectionPage";
@@ -27,8 +28,11 @@ const router = createBrowserRouter(
           <Route path="upload-image" element={<ImageUploadPage />} />
           <Route path="input-isbn" element={<ISBNInputPage />} />
           <Route path="scan-barcode" element={<BarcodeScannerPage />} />
-          {/* <Route path="confirm-book" element={} /> */}
-          {/* <Route path="confirm-donation" element={} /> */}
+          {/* <Route path="confirm-book" element={<BookConfirmationPage /> } /> */}
+          <Route
+            path="confirm-donation"
+            element={<DonationConfirmationPage />}
+          />
         </Route>
       </Route>
       <Route path="/mock">
