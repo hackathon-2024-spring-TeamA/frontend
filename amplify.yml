@@ -2,18 +2,15 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm install -g pnpm 
+        - npm install -g pnpm
         - pnpm install
-        - pnpm install prop-types
-        - pnpm install @types/prop-types --save-dev
-        - amplify pull --appId d2wafan2t3yyih --envName dev --yes
     build:
       commands:
         - pnpm run build
   artifacts:
     baseDirectory: dist
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
