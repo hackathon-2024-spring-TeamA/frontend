@@ -5,6 +5,8 @@ frontend:
         - amplify pull --appId d2wafan2t3yyih --envName dev --yes
         - npm install -g pnpm
         - pnpm install
+        - pnpm install prop-types
+        - pnpm install @types/prop-types --save-dev # TypeScript型定義のインストール
     build:
       commands:
         - pnpm run build
