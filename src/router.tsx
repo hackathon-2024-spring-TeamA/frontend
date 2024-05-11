@@ -22,6 +22,7 @@ import MockHomePage from "@/pages/mock/MockHomePage";
 import "@aws-amplify/ui-react/styles.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Button } from "@mui/material";
+import PropTypes from "prop-types";
 
 const theme = createTheme({
   palette: {
