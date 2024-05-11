@@ -2,6 +2,7 @@ frontend:
   phases:
     preBuild:
       commands:
+        - amplify pull --appId d2wafan2t3yyih --envName dev --yes
         - npm install -g pnpm
         - pnpm install
     build:
