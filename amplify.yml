@@ -2,11 +2,11 @@ frontend:
   phases:
     preBuild:
       commands:
-        - amplify pull --appId d2wafan2t3yyih --envName dev --yes
-        - npm install -g pnpm
+        - npm install -g pnpm 
         - pnpm install
         - pnpm install prop-types
-        - pnpm install @types/prop-types --save-dev # TypeScript型定義のインストール
+        - pnpm install @types/prop-types --save-dev
+        - amplify pull --appId d2wafan2t3yyih --envName dev --yes
     build:
       commands:
         - pnpm run build
