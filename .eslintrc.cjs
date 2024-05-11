@@ -12,7 +12,7 @@ module.exports = {
     "prettier",
     "plugin:storybook/recommended",
   ],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
+  ignorePatterns: ["dist", ".eslintrc.cjs", "amplify/"],
   parser: "@typescript-eslint/parser",
   plugins: ["react-refresh", "import"],
   settings: {
