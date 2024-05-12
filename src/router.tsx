@@ -24,12 +24,10 @@ const router = createBrowserRouter(
         {/* 作成した本番用Pageコンポーネントを配置 */}
         <Route path="donation">
           {/* 寄付機能 PATH */}
-          {/* TODO: 各ページの作成  */}
           <Route path="selection" element={<MainSelectionPage />} />
           <Route path="input-book-title" element={<BookTitleInputPage />} />
           <Route path="input-isbn" element={<ISBNInputPage />} />
           <Route path="scan-barcode" element={<BarcodeScannerPage />} />
-          {/* <Route path="confirm-book" element={<BookConfirmationPage /> } /> */}
           <Route
             path="confirm-donation"
             element={<DonationConfirmationPage />}
