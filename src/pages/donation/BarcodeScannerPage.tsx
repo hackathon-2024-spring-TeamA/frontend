@@ -1,37 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { Box, Button, Container, Paper } from "@mui/material";
-import { BrowserMultiFormatReader } from "@zxing/library";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import BookDetailsModal from "@/components/Modal/BookDetailModal";
-
-interface BarcodeScannerProps {
-  onScanSuccess: (isbn: string) => void;
-}
-
-const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScanSuccess }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const codeReader = new BrowserMultiFormatReader();
-    codeReader
-      .decodeFromVideoDevice(null, videoRef.current, (result, error) => {
-        if (result) {
-          onScanSuccess(result.getText());
-        } else {
-          console.log(error);
-        }
-      })
-      .catch(console.error);
-
-    return () => {
-      codeReader.reset();
-    };
-  }, [onScanSuccess]);
-
-  return <video ref={videoRef} style={{ width: "100%", height: "100%" }} />;
-};
+import BarcodeScanner from "@/components/Scanner/BarcodeScanner";
 
 const BarcodeScannerPage: React.FC = () => {
   const [isbn, setIsbn] = useState("");
@@ -79,10 +52,23 @@ const BarcodeScannerPage: React.FC = () => {
           padding: 4,
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          alignItems: "center",
+          justifyContent: "center",
+          maxHeight: 640,
         }}
       >
-        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            margin: "auto",
+            alignContent: "center",
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+            バーコードを中央に合わせてください
+          </Typography>
           <BarcodeScanner onScanSuccess={handleScanSuccess} />
           {book && (
             <BookDetailsModal
