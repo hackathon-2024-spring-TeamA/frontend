@@ -57,6 +57,7 @@ const ISBNInputPage: React.FC = () => {
           padding: 4,
           display: "flex",
           flexDirection: "column",
+          maxHeight: 640,
         }}
       >
         <CardMedia
