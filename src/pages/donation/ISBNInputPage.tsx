@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,6 +12,8 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+
+import BookDetailsModal from "@/components/Modal/BookDetailModal";
 
 // Zodのスキーマ定義
 const schema = z.object({
@@ -30,10 +32,46 @@ const ISBNInputPage: React.FC = () => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
+  // 本のstate
+  const [book, setBook] = useState<{
+    imagePath: string;
+    title: string;
+    authors: string[];
+  } | null>(null);
+
+  // モーダルのstate
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = (bookData: {
+    imagePath: string;
+    title: string;
+    authors: string[];
+  }) => {
+    setBook(bookData);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleConfirm = () => {
+    setModalOpen(false);
+    navigate("/donation/confirm-donation");
+  };
+
   // サブミットハンドラー
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form Data:", data);
+
+    // Mockの仮データ
     // TODO: ここでGoogle Books APIの呼び出しやDBへの保存処理を実装する
+    const mockBook = {
+      imagePath: "/src/assets/book-open-svgrepo-com.svg",
+      title: "Sample Book",
+      authors: ["Author One", "Author Two"],
+    };
+    handleOpenModal(mockBook);
   };
 
   const navigate = useNavigate();
@@ -74,7 +112,7 @@ const ISBNInputPage: React.FC = () => {
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <TextField
             label="ISBN"
-            {...register("isbn")}
+            {...register("isbn", { required: "ISBNは必須です。" })}
             error={!!errors.isbn}
             helperText={errors.isbn?.message}
             fullWidth
@@ -96,6 +134,14 @@ const ISBNInputPage: React.FC = () => {
             検索
           </Button>
         </Box>
+        {book && (
+          <BookDetailsModal
+            open={modalOpen}
+            onClose={handleCloseModal}
+            onConfirm={handleConfirm}
+            book={book}
+          />
+        )}
       </Paper>
 
       {/* 戻るボタン */}
