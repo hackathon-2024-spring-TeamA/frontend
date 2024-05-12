@@ -5,8 +5,8 @@ import {
 } from "react-router-dom";
 
 import BarcodeScannerPage from "./pages/donation/BarcodeScannerPage";
+import BookTitleInputPage from "./pages/donation/BookTitleInputPage";
 import DonationConfirmationPage from "./pages/donation/DonationConfirmationPage";
-import ImageUploadPage from "./pages/donation/ImageUploadPage";
 import ISBNInputPage from "./pages/donation/ISBNInputPage";
 import MainSelectionPage from "./pages/donation/MainSelectionPage";
 import MockCardsPage from "./pages/mock/MockCardsPage";
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
           {/* 寄付機能 PATH */}
           {/* TODO: 各ページの作成  */}
           <Route path="selection" element={<MainSelectionPage />} />
-          <Route path="upload-image" element={<ImageUploadPage />} />
+          <Route path="input-book-title" element={<BookTitleInputPage />} />
           <Route path="input-isbn" element={<ISBNInputPage />} />
           <Route path="scan-barcode" element={<BarcodeScannerPage />} />
           {/* <Route path="confirm-book" element={<BookConfirmationPage /> } /> */}
