@@ -12,7 +12,7 @@ const MainSelectionPage: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         p: 4,
-        minHeight: "100vh",
+        minHeight: "80vh",
       }}
     >
       <Grid

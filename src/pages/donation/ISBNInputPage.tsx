@@ -8,6 +8,7 @@ import {
   Container,
   Paper,
   CardMedia,
+  Typography,
 } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -51,9 +52,7 @@ const ISBNInputPage: React.FC = () => {
     setModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  const handleCloseModal = () => setModalOpen(false);
 
   const handleConfirm = () => {
     setModalOpen(false);
@@ -75,27 +74,30 @@ const ISBNInputPage: React.FC = () => {
   };
 
   const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate(-1); // 直前のページに戻る
-  };
+  const handleBack = () => navigate(-1);
 
   return (
     <Container
       maxWidth="md"
       sx={{ height: "80vh", display: "flex", flexDirection: "column" }}
     >
+      <Typography variant="h5" align="center" gutterBottom>
+        ISBN 検索
+      </Typography>
       <Paper
         elevation={3}
         sx={{
-          border: 1,
+          border: 2,
           borderColor: "grey.700",
           borderRadius: 4,
           flexGrow: 1,
-          padding: 4,
+          p: 4,
           display: "flex",
           flexDirection: "column",
-          maxHeight: 640,
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+          "&:hover": {
+            boxShadow: "0 12px 24px rgba(0, 0, 0, 0.3)",
+          },
         }}
       >
         <CardMedia
@@ -106,7 +108,7 @@ const ISBNInputPage: React.FC = () => {
             width: "100%",
             height: "auto",
             maxWidth: { md: "360px", xs: "240px" },
-            margin: "auto",
+            m: "auto",
           }}
         />
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -123,12 +125,11 @@ const ISBNInputPage: React.FC = () => {
             variant="contained"
             size="large"
             color="primary"
-            // endIcon={<SearchOutlined />}
             sx={{
               display: "block",
-              margin: "auto",
+              m: "auto",
               width: "100%",
-              marginTop: 2,
+              mt: 2,
             }}
           >
             検索
@@ -144,12 +145,11 @@ const ISBNInputPage: React.FC = () => {
         )}
       </Paper>
 
-      {/* 戻るボタン */}
       <Button
         variant="contained"
         color="secondary"
         size="large"
-        sx={{ display: "block", width: "auto", margin: "auto", marginTop: 2 }}
+        sx={{ display: "block", width: "auto", m: "auto", mt: 2 }}
         onClick={handleBack}
       >
         戻る
