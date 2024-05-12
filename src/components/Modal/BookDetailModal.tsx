@@ -18,7 +18,8 @@ interface BookDetailsModalProps {
 }
 
 // 本確認画面(仮)
-// Todo: 画像の追加・スタイルの調整
+// Todo: スタイルの調整
+// Todo: confirmボタンを押下すると、選択された本を次のコンポーネントに渡す必要がある
 const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
   open,
   onClose,
