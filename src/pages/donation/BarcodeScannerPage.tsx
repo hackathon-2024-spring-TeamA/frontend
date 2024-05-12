@@ -8,9 +8,12 @@ import BarcodeScanner from "@/components/Scanner/BarcodeScanner";
 
 const BarcodeScannerPage: React.FC = () => {
   const [isbn, setIsbn] = useState("");
-  const [book, setBook] = useState<{ title: string; authors: string[] } | null>(
-    null,
-  );
+  const [book, setBook] = useState<{
+    imagePath: string;
+    title: string;
+    authors: string[];
+  } | null>(null);
+
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -25,6 +28,7 @@ const BarcodeScannerPage: React.FC = () => {
     // todo: google books apiの実装をここで行い、本を検索して取得する
     // Mock仮データ
     const mockBook = {
+      imagePath: "/src/assets/book-open-svgrepo-com.svg",
       title: "Sample Book",
       authors: ["Author One", "Author Two"],
     };
