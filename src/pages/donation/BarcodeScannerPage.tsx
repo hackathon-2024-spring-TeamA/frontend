@@ -17,9 +17,7 @@ const BarcodeScannerPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1); // 直前のページに戻る
-  };
+  const handleBack = () => navigate(-1);
 
   const handleScanSuccess = (scannedIsbn: string) => {
     setIsbn(scannedIsbn);
@@ -44,21 +42,33 @@ const BarcodeScannerPage: React.FC = () => {
   return (
     <Container
       maxWidth="md"
-      sx={{ height: "80vh", display: "flex", flexDirection: "column" }}
+      sx={{
+        height: "80vh",
+        display: "flex",
+        flexDirection: "column",
+        // alignItems: "center",
+        // justifyContent: "center",
+      }}
     >
+      <Typography variant="h5" align="center" gutterBottom>
+        バーコードスキャン
+      </Typography>
       <Paper
         elevation={3}
         sx={{
-          border: 1,
+          border: 2,
           borderColor: "grey.700",
           borderRadius: 4,
           flexGrow: 1,
-          padding: 4,
+          p: 4,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          maxHeight: 640,
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+          "&:hover": {
+            boxShadow: "0 12px 24px rgba(0, 0, 0, 0.3)",
+          },
         }}
       >
         <Box
@@ -66,11 +76,14 @@ const BarcodeScannerPage: React.FC = () => {
             flexGrow: 1,
             display: "flex",
             flexDirection: "column",
-            margin: "auto",
-            alignContent: "center",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+          <Typography
+            variant="h6"
+            sx={{ mb: 2, textAlign: "center", color: "primary.main" }}
+          >
             バーコードを中央に合わせてください
           </Typography>
           <BarcodeScanner onScanSuccess={handleScanSuccess} />
@@ -84,17 +97,14 @@ const BarcodeScannerPage: React.FC = () => {
           )}
         </Box>
       </Paper>
-      {/* 戻るボタン */}
       <Button
         variant="contained"
         color="secondary"
         size="large"
         sx={{
           display: "block",
-          width: "auto",
-          margin: "auto",
-          marginTop: 2,
-          marginBottom: 2,
+          m: "auto",
+          mt: 2,
         }}
         onClick={handleBack}
       >
