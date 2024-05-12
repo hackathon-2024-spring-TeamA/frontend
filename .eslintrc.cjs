@@ -50,5 +50,6 @@ module.exports = {
         ],
       },
     ],
+    "react/prop-types": "off", // TSの型定義で十分、冗長になってしまうため追加
   },
 };
