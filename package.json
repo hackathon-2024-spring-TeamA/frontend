@@ -26,9 +26,12 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
+    "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "@vanilla-extract/css": "^1.14.2",
+    "@zxing/browser": "^0.1.4",
+    "@zxing/library": "^0.21.0",
     "aws-amplify": "^6.3.0",
     "axios": "^1.6.8",
     "graphql": "^16.8.1",
@@ -86,9 +89,6 @@
       "prettier --write"
     ],
     "*.json": [
-      "prettier --write"
-    ],
-    "*.md": [
       "prettier --write"
     ]
   }

@@ -9,10 +9,12 @@ import {
 } from "react-router-dom";
 
 import BarcodeScannerPage from "./pages/donation/BarcodeScannerPage";
+import DonationConfirmationPage from "./pages/donation/DonationConfirmationPage";
 import ImageUploadPage from "./pages/donation/ImageUploadPage";
 import ISBNInputPage from "./pages/donation/ISBNInputPage";
 import MainSelectionPage from "./pages/donation/MainSelectionPage";
 import MockCardsPage from "./pages/mock/MockCardsPage";
+import RequestBooksPage from "./pages/request/RequestBooksPage";
 
 import MainLayout from "@/components/Layout/MainLayout";
 import MockAboutPage from "@/pages/mock/MockAboutPage";
@@ -60,8 +62,17 @@ const router = createBrowserRouter(
           <Route path="upload-image" element={<ImageUploadPage />} />
           <Route path="input-isbn" element={<ISBNInputPage />} />
           <Route path="scan-barcode" element={<BarcodeScannerPage />} />
-          {/* <Route path="confirm-book" element={} /> */}
-          {/* <Route path="confirm-donation" element={} /> */}
+          {/* <Route path="confirm-book" element={<BookConfirmationPage /> } /> */}
+          <Route
+            path="confirm-donation"
+            element={<DonationConfirmationPage />}
+          />
+        </Route>
+        <Route path="requests">
+          {/* リクエスト一覧 PATH */}
+          {/* TODO: 各ページの作成  */}
+          <Route index element={<RequestBooksPage />} />
+          {/* <Route path="selection" element={<MainSelectionPage />} /> */}
         </Route>
       </Route>
       <Route path="/mock">

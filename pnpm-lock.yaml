@@ -23,6 +23,9 @@ importers:
       '@fontsource/roboto':
         specifier: ^5.0.13
         version: 5.0.13
+      '@hookform/resolvers':
+        specifier: ^3.3.4
+        version: 3.3.4(react-hook-form@7.51.2(react@18.2.0))
       '@mui/icons-material':
         specifier: ^5.15.15
         version: 5.15.15(@mui/material@5.15.15(@emotion/react@11.11.4(@types/react@18.2.70)(react@18.2.0))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.2.70)(react@18.2.0))(@types/react@18.2.70)(react@18.2.0))(@types/react@18.2.70)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@types/react@18.2.70)(react@18.2.0)
@@ -32,6 +35,12 @@ importers:
       '@vanilla-extract/css':
         specifier: ^1.14.2
         version: 1.14.2
+      '@zxing/browser':
+        specifier: ^0.1.4
+        version: 0.1.4(@zxing/library@0.21.0)
+      '@zxing/library':
+        specifier: ^0.21.0
+        version: 0.21.0
       aws-amplify:
         specifier: ^6.3.0
         version: 6.3.0
@@ -240,8 +249,8 @@ packages:
   '@aws-amplify/data-schema-types@1.0.1':
     resolution: {integrity: sha512-+hRNzVuVkhjLl7Oxcse087y/PYKSjCETHE0KnRNYzQy5f/dzYw1sE8ui76bk5TR2O+vs7f8P42Ti90sWOgSzSQ==}
 
-  '@aws-amplify/data-schema@1.1.6':
-    resolution: {integrity: sha512-bhq71bt7P6AZX4Yj7JW8al5ysyBbpwCTPzbjN/KmfCHCjytB3hPKuQ9fXagLl/0sAjkmLdu8LKYz0x0KdOMfAQ==}
+  '@aws-amplify/data-schema@1.2.0':
+    resolution: {integrity: sha512-QGWUo0Rnp2Qu6XRc5UCGuTKFri37pKxfB9hur8PWaXyCYeHYTDhmDlJLma1H+/AJ0iATrFx70f5QBRQ7GRj3Ig==}
 
   '@aws-amplify/datastore@5.0.32':
     resolution: {integrity: sha512-OJalFtsrGa9N0H/7DhEKmQvf+SEObQ11lgGVPKZEiw1e2KN+I2ysd2jov6INcp6aDZ5wY8Ty8sgxpmWH3PjiiQ==}
@@ -1300,6 +1309,11 @@ packages:
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+
+  '@hookform/resolvers@3.3.4':
+    resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -2574,6 +2588,18 @@ packages:
   '@yarnpkg/libzip@2.3.0':
     resolution: {integrity: sha512-6xm38yGVIa6mKm/DUCF2zFFJhERh/QWp1ufm4cNUvxsONBmfPg8uZ9pZBdOmF6qFGr/HlT6ABBkCSx/dlEtvWg==}
     engines: {node: '>=12 <14 || 14.2 - 14.9 || >14.10.0'}
+
+  '@zxing/browser@0.1.4':
+    resolution: {integrity: sha512-WYjaav7St4sj/u/Km2llE4NU2Pq3JFIWnczr0tmyCC1KUlp08rV3qpu7iiEB4kOx/CgcCzrSebNnSmFt5B3IFg==}
+    peerDependencies:
+      '@zxing/library': ^0.20.0
+
+  '@zxing/library@0.21.0':
+    resolution: {integrity: sha512-2+DFYM6NLl+ZXXUbDOkmVn4TAAOgTniEx5MJD2kStujcxSl6j9CfAgIT8DcsBYIlT5DW7oeiShEzWZjpL0hNOw==}
+    engines: {node: '>= 10.4.0'}
+
+  '@zxing/text-encoding@0.9.0':
+    resolution: {integrity: sha512-U/4aVJ2mxI0aDNI8Uq0wEhMgY+u4CNtEb0om3+y3+niDAsoTCOB33UF0sxpzqzdqXLqmvc+vZyAt4O8pPdfkwA==}
 
   accepts@1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
@@ -5467,6 +5493,10 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
+  ts-custom-error@3.3.1:
+    resolution: {integrity: sha512-5OX1tzOjxWEgsr/YEUWSuPrQ00deKLh6D7OTWcvNHm12/7QPyRh8SYpyWvA4IZv8H/+GQWQEh/kwo95Q9OVW1A==}
+    engines: {node: '>=14.0.0'}
+
   ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
@@ -6000,7 +6030,7 @@ snapshots:
     dependencies:
       '@aws-amplify/api-rest': 4.0.30(@aws-amplify/core@6.2.0)
       '@aws-amplify/core': 6.2.0
-      '@aws-amplify/data-schema': 1.1.6
+      '@aws-amplify/data-schema': 1.2.0
       '@aws-sdk/types': 3.387.0
       graphql: 15.8.0
       rxjs: 7.8.1
@@ -6041,7 +6071,7 @@ snapshots:
       graphql: 15.8.0
       rxjs: 7.8.1
 
-  '@aws-amplify/data-schema@1.1.6':
+  '@aws-amplify/data-schema@1.2.0':
     dependencies:
       '@aws-amplify/data-schema-types': 1.0.1
       '@types/aws-lambda': 8.10.137
@@ -7551,6 +7581,10 @@ snapshots:
   '@graphql-typed-document-node/core@3.2.0(graphql@16.8.1)':
     dependencies:
       graphql: 16.8.1
+
+  '@hookform/resolvers@3.3.4(react-hook-form@7.51.2(react@18.2.0))':
+    dependencies:
+      react-hook-form: 7.51.2(react@18.2.0)
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -9480,6 +9514,21 @@ snapshots:
     dependencies:
       '@types/emscripten': 1.39.10
       tslib: 1.14.1
+
+  '@zxing/browser@0.1.4(@zxing/library@0.21.0)':
+    dependencies:
+      '@zxing/library': 0.21.0
+    optionalDependencies:
+      '@zxing/text-encoding': 0.9.0
+
+  '@zxing/library@0.21.0':
+    dependencies:
+      ts-custom-error: 3.3.1
+    optionalDependencies:
+      '@zxing/text-encoding': 0.9.0
+
+  '@zxing/text-encoding@0.9.0':
+    optional: true
 
   accepts@1.3.8:
     dependencies:
@@ -12717,6 +12766,8 @@ snapshots:
   ts-api-utils@1.3.0(typescript@5.4.3):
     dependencies:
       typescript: 5.4.3
+
+  ts-custom-error@3.3.1: {}
 
   ts-dedent@2.2.0: {}
 
