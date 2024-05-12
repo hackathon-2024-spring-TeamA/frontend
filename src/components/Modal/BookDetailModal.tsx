@@ -56,7 +56,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
           }}
         />{" "}
         <Typography variant="subtitle1" align="center" sx={{ mb: 2 }}>
-          以下の書籍で間違いありませんか？？
+          この書籍で間違いありませんか？？
         </Typography>
         <Typography
           variant="h5"
