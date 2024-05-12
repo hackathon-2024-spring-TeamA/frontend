@@ -46,8 +46,8 @@ const BarcodeScannerPage: React.FC = () => {
         height: "80vh",
         display: "flex",
         flexDirection: "column",
-        // alignItems: "center",
-        // justifyContent: "center",
+        alignItems: "center",
+        justifyContent: "flex-start",
       }}
     >
       <Typography variant="h5" align="center" gutterBottom>
@@ -80,12 +80,6 @@ const BarcodeScannerPage: React.FC = () => {
             justifyContent: "center",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{ mb: 2, textAlign: "center", color: "primary.main" }}
-          >
-            バーコードを中央に合わせてください
-          </Typography>
           <BarcodeScanner onScanSuccess={handleScanSuccess} />
           {book && (
             <BookDetailsModal
