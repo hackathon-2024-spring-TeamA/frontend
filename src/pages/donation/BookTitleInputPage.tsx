@@ -131,6 +131,7 @@ const BookTitleInputPage: React.FC = () => {
             検索
           </Button>
         </Box>
+        {/* TODO: 複数の本から選択可能になモーダルに変更 */}
         {book && (
           <BookDetailsModal
             open={modalOpen}

@@ -8,6 +8,7 @@ import {
   Button,
   Typography,
   CardMedia,
+  Box,
 } from "@mui/material";
 
 interface BookDetailsModalProps {
@@ -17,36 +18,66 @@ interface BookDetailsModalProps {
   book: { imagePath: string; title: string; authors: string[] };
 }
 
-// 本確認画面(仮)
-// Todo: スタイルの調整
-// Todo: confirmボタンを押下すると、選択された本を次のコンポーネントに渡す必要がある
 const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
   open,
   onClose,
   onConfirm,
   book,
 }) => (
-  <Dialog open={open} onClose={onClose}>
-    <DialogTitle>Book Details</DialogTitle>
-    <CardMedia
-      component="img"
-      src={book.imagePath}
-      alt="Book Icon"
-      sx={{
-        width: "100%",
-        height: "auto",
-        maxWidth: { md: "360px", xs: "240px" },
-        margin: "auto",
-      }}
-    />
+  <Dialog
+    open={open}
+    onClose={onClose}
+    maxWidth="sm"
+    fullWidth
+    PaperProps={{
+      sx: { borderRadius: 4, p: 2, boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)" },
+    }}
+  >
+    <DialogTitle>
+      <Typography variant="h4" align="center" fontWeight="bold">
+        Book Details
+      </Typography>
+    </DialogTitle>
+
     <DialogContent>
-      <Typography variant="h5">Title: {book.title}</Typography>
-      <Typography variant="h6">Authors: {book.authors.join(", ")}</Typography>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <CardMedia
+          component="img"
+          src={book.imagePath}
+          alt="Book Image"
+          sx={{
+            width: "80%",
+            height: "auto",
+            maxWidth: { md: "300px", xs: "200px" },
+            margin: "auto",
+            borderRadius: 8,
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            marginBottom: 3,
+          }}
+        />{" "}
+        <Typography variant="subtitle1" align="center" sx={{ mb: 2 }}>
+          以下の書籍で間違いありませんか？？
+        </Typography>
+        <Typography
+          variant="h5"
+          align="center"
+          fontWeight="bold"
+          sx={{ mb: 1 }}
+        >
+          タイトル: {book.title}
+        </Typography>
+        <Typography variant="subtitle1" align="center" color="text.secondary">
+          著者: {book.authors.join(", ")}
+        </Typography>
+      </Box>
     </DialogContent>
-    <DialogActions>
-      <Button onClick={onClose}>Cancel</Button>
-      <Button onClick={onConfirm} color="primary">
-        Confirm
+
+    <DialogActions sx={{ justifyContent: "center" }}>
+      <Button onClick={onClose} variant="outlined" color="secondary">
+        キャンセル
+      </Button>
+      <Button onClick={onConfirm} variant="contained" color="primary">
+        確認
       </Button>
     </DialogActions>
   </Dialog>
