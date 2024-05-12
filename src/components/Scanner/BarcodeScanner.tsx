@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 
-import { BrowserMultiFormatReader } from "@zxing/library";
+import { BrowserMultiFormatReader, Result } from "@zxing/library";
 
 interface BarcodeScannerProps {
   onScanSuccess: (isbn: string) => void;
@@ -8,12 +8,14 @@ interface BarcodeScannerProps {
 
 const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScanSuccess }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [latestResult, setLatestResult] = useState<Result | null>(null);
+  const codeReader = useMemo(() => new BrowserMultiFormatReader(), []);
 
   useEffect(() => {
-    const codeReader = new BrowserMultiFormatReader();
     codeReader
       .decodeFromVideoDevice(null, videoRef.current, (result, error) => {
-        if (result) {
+        if (result && result !== latestResult) {
+          setLatestResult(result);
           onScanSuccess(result.getText());
         } else {
           console.log(error);
@@ -24,7 +26,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScanSuccess }) => {
     return () => {
       codeReader.reset();
     };
-  }, [onScanSuccess]);
+  }, [codeReader, onScanSuccess, latestResult]);
 
   return <video ref={videoRef} style={{ width: "100%", minHeight: "40vh" }} />;
 };
