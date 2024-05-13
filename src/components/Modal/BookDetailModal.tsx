@@ -35,7 +35,7 @@ const BookDetailsModal: React.FC<BookDetailsModalProps> = ({
   >
     <DialogTitle>
       <Typography variant="h4" align="center" fontWeight="bold">
-        Book Details
+        Book Search Results
       </Typography>
     </DialogTitle>
 
