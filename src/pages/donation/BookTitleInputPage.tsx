@@ -14,7 +14,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-import BookDetailsModal from "@/components/Modal/BookDetailModal";
+import BooksListModal from "@/components/Modal/BookListModal";
 
 const schema = z.object({
   book: z.string().min(1, "タイトルを入力してください。"),
@@ -29,29 +29,34 @@ const BookTitleInputPage: React.FC = () => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
-  // 本のstate
-  const [book, setBook] = useState<{
-    imagePath: string;
-    title: string;
-    authors: string[];
-  } | null>(null);
-
   // モーダルのstate
   const [modalOpen, setModalOpen] = useState(false);
-
-  const handleOpenModal = (bookData: {
+  const [books, setBooks] = useState<Array<{
     imagePath: string;
     title: string;
     authors: string[];
-  }) => {
-    setBook(bookData);
+  }> | null>(null);
+
+  const handleOpenModal = (
+    bookData: Array<{
+      imagePath: string;
+      title: string;
+      authors: string[];
+    }>,
+  ) => {
+    setBooks(bookData);
     setModalOpen(true);
   };
 
   const handleCloseModal = () => setModalOpen(false);
 
-  const handleConfirm = () => {
+  const handleConfirm = (selectedBook: {
+    imagePath: string;
+    title: string;
+    authors: string[];
+  }) => {
     setModalOpen(false);
+    console.log("Selected Book:", selectedBook);
     navigate("/donation/confirm-donation");
   };
 
@@ -60,13 +65,24 @@ const BookTitleInputPage: React.FC = () => {
     console.log("Form Data:", data);
 
     // Mockの仮データ
-    // TODO: ここでGoogle Books APIの呼び出しやDBへの保存処理を実装する
-    const mockBook = {
-      imagePath: "/src/assets/book-open-svgrepo-com.svg",
-      title: "Sample Book",
-      authors: ["Author One", "Author Two"],
-    };
-    handleOpenModal(mockBook);
+    const mockBooks = [
+      {
+        imagePath: "/src/assets/book-open-svgrepo-com.svg",
+        title: "Sample Book 1",
+        authors: ["Author One"],
+      },
+      {
+        imagePath: "/src/assets/book-open-svgrepo-com.svg",
+        title: "Sample Book 2",
+        authors: ["Author Two"],
+      },
+      {
+        imagePath: "/src/assets/book-open-svgrepo-com.svg",
+        title: "Sample Book 3",
+        authors: ["Author Three"],
+      },
+    ];
+    handleOpenModal(mockBooks);
   };
 
   const navigate = useNavigate();
@@ -131,13 +147,12 @@ const BookTitleInputPage: React.FC = () => {
             検索
           </Button>
         </Box>
-        {/* TODO: 複数の本から選択可能になモーダルに変更 */}
-        {book && (
-          <BookDetailsModal
+        {books && (
+          <BooksListModal
             open={modalOpen}
             onClose={handleCloseModal}
             onConfirm={handleConfirm}
-            book={book}
+            books={books}
           />
         )}
       </Paper>

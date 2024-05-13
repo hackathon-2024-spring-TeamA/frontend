@@ -8,7 +8,7 @@ import {
   Button,
   Typography,
   List,
-  ListItem,
+  ListItemButton,
   ListItemAvatar,
   ListItemText,
   Avatar,
@@ -68,9 +68,8 @@ const BooksListModal: React.FC<BooksListModalProps> = ({
       <DialogContent dividers>
         <List sx={{ maxHeight: "400px", overflow: "auto" }}>
           {books.map((book, index) => (
-            <ListItem
+            <ListItemButton
               key={index}
-              button
               selected={selectedBook === book}
               onClick={() => handleListItemClick(book)}
             >
@@ -81,7 +80,7 @@ const BooksListModal: React.FC<BooksListModalProps> = ({
                 primary={book.title}
                 secondary={book.authors.join(", ")}
               />
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
       </DialogContent>
