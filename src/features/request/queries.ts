@@ -1,8 +1,18 @@
 import { gql } from "@apollo/client";
 
 export const PAGINATED_BOOK_REQUESTS = gql`
-  query PaginatedBookRequests($page: Int!, $perPage: Int!) {
-    paginatedBookRequests(page: $page, perPage: $perPage) {
+  query PaginatedBookRequests(
+    $page: Int!
+    $perPage: Int!
+    $userId: String!
+    $isMyRequest: Boolean!
+  ) {
+    paginatedBookRequests(
+      page: $page
+      perPage: $perPage
+      userId: $userId
+      isMyRequest: $isMyRequest
+    ) {
       totalCount
       currentPage
       perPage
