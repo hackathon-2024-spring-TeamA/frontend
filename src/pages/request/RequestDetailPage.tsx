@@ -1,11 +1,25 @@
+import { useMutation } from "@apollo/client";
 import { Box, Typography, Grid, Button, Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
+
+import { UPDATE_BOOK_REQUEST_STATUS } from "@/features/request/mutations";
 
 const RequestDetailPage = () => {
   const location = useLocation();
   const bookRequest = location.state?.bookRequest;
   // const searchParams = new URLSearchParams(location.search);
   // const requestId = searchParams.get("requestId");
+
+  const [updateBookRequestStatus] = useMutation(UPDATE_BOOK_REQUEST_STATUS);
+
+  const handleArrivalClick = () => {
+    updateBookRequestStatus({
+      variables: {
+        requestId: bookRequest.id,
+        status: "arrived",
+      },
+    });
+  };
 
   if (!bookRequest) {
     return <div>データが見つかりませんでした。</div>;
@@ -67,7 +81,12 @@ const RequestDetailPage = () => {
               <Button size="large" variant="contained">
                 配送サービスの使い方
               </Button>
-              <Button size="large" variant="outlined">
+              <Button
+                size="large"
+                variant="outlined"
+                disabled={bookRequest.status !== "sending"}
+                onClick={handleArrivalClick}
+              >
                 到着済み（相手の発送後にクリックできるようになります。）
               </Button>
             </Box>
