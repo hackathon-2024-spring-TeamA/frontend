@@ -53,7 +53,8 @@ const AuthenticatedHomePage = withAuthenticator(MockHomePage);
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<MainLayout />}>
-      <Route path="/" element={<AuthenticatedHomePage />}>
+      <Route path="/">
+        <Route index element={<AuthenticatedHomePage />} />
         {/* 作成した本番用Pageコンポーネントを配置 */}
         <Route path="donation">
           {/* 寄付機能 PATH */}
