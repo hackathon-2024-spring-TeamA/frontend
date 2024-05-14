@@ -26,10 +26,7 @@ export const BooksArea: React.FC<BooksAreaProps> = ({
           >
             {bookRequests.map((bookRequest, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <BookCard
-                  bookInfo={bookRequest.book.book_information}
-                  loading={loading}
-                />
+                <BookCard bookRequest={bookRequest} loading={loading} />
               </Grid>
             ))}
           </Grid>
