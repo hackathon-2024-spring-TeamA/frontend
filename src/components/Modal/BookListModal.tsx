@@ -72,13 +72,36 @@ const BooksListModal: React.FC<BooksListModalProps> = ({
               key={index}
               selected={selectedBook === book}
               onClick={() => handleListItemClick(book)}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                height: { xs: "100px", md: "120px" },
+                mb: 2,
+              }}
             >
               <ListItemAvatar>
-                <Avatar src={book.imagePath} alt="Book Image" />
+                <Avatar
+                  src={book.imagePath}
+                  alt="Book Image"
+                  variant="square"
+                  sx={{
+                    width: { xs: 60, md: 80 },
+                    height: { xs: 80, md: 100 },
+                    mr: 2,
+                  }}
+                />
               </ListItemAvatar>
               <ListItemText
-                primary={book.title}
-                secondary={book.authors.join(", ")}
+                primary={
+                  <Typography variant="h6" noWrap>
+                    {book.title}
+                  </Typography>
+                }
+                secondary={
+                  <Typography variant="body2" color="text.secondary" noWrap>
+                    {book.authors.join(", ")}
+                  </Typography>
+                }
               />
             </ListItemButton>
           ))}
