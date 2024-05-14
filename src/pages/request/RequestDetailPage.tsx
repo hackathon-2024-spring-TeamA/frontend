@@ -1,24 +1,41 @@
+import React, { useState } from "react";
+
 import { useMutation } from "@apollo/client";
 import { Box, Typography, Grid, Button, Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
+import { ConfirmationModal } from "@/components/Common/ConfirmationModal";
 import { UPDATE_BOOK_REQUEST_STATUS } from "@/features/request/mutations";
 
-const RequestDetailPage = () => {
+const RequestDetailPage: React.FC = () => {
   const location = useLocation();
   const bookRequest = location.state?.bookRequest;
   // const searchParams = new URLSearchParams(location.search);
   // const requestId = searchParams.get("requestId");
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [requestArrived, setRequestArrived] = useState(
+    bookRequest?.status === "arrived",
+  );
   const [updateBookRequestStatus] = useMutation(UPDATE_BOOK_REQUEST_STATUS);
 
   const handleArrivalClick = () => {
+    setModalOpen(true);
+  };
+
+  const handleConfirmArrival = () => {
     updateBookRequestStatus({
       variables: {
         requestId: bookRequest.id,
         status: "arrived",
       },
     });
+    setModalOpen(false);
+    setRequestArrived(true);
+  };
+
+  const handleCancelArrival = () => {
+    setModalOpen(false);
   };
 
   if (!bookRequest) {
@@ -81,14 +98,23 @@ const RequestDetailPage = () => {
               <Button size="large" variant="contained">
                 配送サービスの使い方
               </Button>
-              <Button
-                size="large"
-                variant="outlined"
-                disabled={bookRequest.status !== "sending"}
-                onClick={handleArrivalClick}
-              >
-                到着済み（相手の発送後にクリックできるようになります。）
-              </Button>
+              {requestArrived ? (
+                <Typography variant="body1">到着済み</Typography>
+              ) : (
+                <Button
+                  size="large"
+                  variant="outlined"
+                  disabled={bookRequest.status !== "sending"}
+                  onClick={handleArrivalClick}
+                >
+                  到着済み（相手の発送後にクリックできるようになります。）
+                </Button>
+              )}
+              <ConfirmationModal
+                open={modalOpen}
+                onConfirm={handleConfirmArrival}
+                onCancel={handleCancelArrival}
+              />
             </Box>
           </Grid>
         </Grid>
