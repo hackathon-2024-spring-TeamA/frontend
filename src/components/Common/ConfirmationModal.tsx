@@ -6,12 +6,14 @@ interface ConfirmationModalProps {
   open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  message: string;
 }
 
 export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   open,
   onConfirm,
   onCancel,
+  message,
 }) => {
   return (
     <Modal open={open} onClose={onCancel}>
@@ -28,9 +30,13 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         }}
       >
         <Typography variant="h6" component="h2" gutterBottom>
-          本当に到着ボタンを押しますか？
+          {message.split("\\n").map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
         </Typography>
-        <Typography>本日から２週間が期限となります。</Typography>
         <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
           <Button onClick={onCancel} sx={{ mr: 1 }}>
             いいえ

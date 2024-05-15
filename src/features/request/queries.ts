@@ -40,3 +40,29 @@ export const PAGINATED_BOOK_REQUESTS = gql`
     }
   }
 `;
+
+export const GET_BOOK_REQUEST = gql`
+  query GetBookRequest($requestId: ID!) {
+    getBookRequest(requestId: $requestId) {
+      id
+      book {
+        id
+        user_id
+        book_information {
+          book_information_id
+          isbn_number
+          title
+          author
+          published_date
+          description
+          image_path
+        }
+        donation_date
+      }
+      requester_id
+      holder_id
+      request_date
+      status
+    }
+  }
+`;
