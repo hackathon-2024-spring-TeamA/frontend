@@ -1,51 +1,56 @@
 import React from "react";
 
-import { Grid } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 
 import ActionAreaCard from "@/components/Card/SelectionCard";
 
 const MainSelectionPage: React.FC = () => {
   return (
-    <Grid
-      container
-      spacing={4}
-      justifyContent={"space-around"}
-      alignItems={"center"}
-      display={"flex"}
-      flexDirection={{ xs: "column", md: "row" }}
-      style={{
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        p: 4,
         minHeight: "80vh",
-        overflow: "auto",
       }}
     >
-      <Grid item xs={10} md={3}>
-        <ActionAreaCard
-          title="画像アップロード"
-          discription="バーコードの画像をアップロードして本の検索を行います"
-          imagePath="/src/assets/upload-svgrepo-com (2).svg"
-          imageAlt="画像検索"
-          targetPath="/donation/upload-image"
-        />
+      <Grid
+        container
+        spacing={4}
+        justifyContent="center"
+        alignItems="stretch"
+        sx={{ width: "100%", maxWidth: "1200px" }}
+      >
+        <Grid item xs={10} md={4}>
+          <ActionAreaCard
+            title="タイトル検索"
+            description="本のタイトルを入力して本の検索を行います"
+            imagePath="/src/assets/book-open-svgrepo-com.svg"
+            imageAlt="画像検索"
+            targetPath="/donation/input-book-title"
+          />
+        </Grid>
+        <Grid item xs={10} md={4}>
+          <ActionAreaCard
+            title="ISBN検索"
+            description="バーコードの下の文字(ISBN)を入力して本の検索を行います"
+            imagePath="/src/assets/barcode1-svgrepo-com.svg"
+            imageAlt="ISBN検索"
+            targetPath="/donation/input-isbn"
+          />
+        </Grid>
+        <Grid item xs={10} md={4}>
+          <ActionAreaCard
+            title="バーコードスキャン"
+            description="カメラで本のバーコードをスキャンして本の検索を行います"
+            imagePath="/src/assets/barcode-code-scan-svgrepo-com.svg"
+            imageAlt="バーコード検索"
+            targetPath="/donation/scan-barcode"
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={10} md={3}>
-        <ActionAreaCard
-          title="ISBN"
-          discription="バーコードの下の文字(ISBN)を入力して本の検索を行います"
-          imagePath="/src/assets/barcode1-svgrepo-com.svg"
-          imageAlt="ISBN検索"
-          targetPath="/donation/input-isbn"
-        />
-      </Grid>
-      <Grid item xs={10} md={3}>
-        <ActionAreaCard
-          title="バーコードスキャン"
-          discription="カメラで本のバーコードをスキャンして本の検索を行います"
-          imagePath="/src/assets/barcode-code-scan-svgrepo-com.svg"
-          imageAlt="バーコード検索"
-          targetPath="/donation/scan-barcode"
-        />
-      </Grid>
-    </Grid>
+    </Box>
   );
 };
 

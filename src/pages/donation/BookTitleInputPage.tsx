@@ -14,56 +14,50 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-import BookDetailsModal from "@/components/Modal/BookDetailModal";
+import BooksListModal from "@/components/Modal/BookListModal";
 
-// Zodのスキーマ定義
 const schema = z.object({
-  isbn: z
-    .string()
-    .length(13, "ISBNは13桁である必要があります")
-    .regex(/^\d{13}$/, "ISBNは数字のみで構成されます"),
+  book: z.string().min(1, "タイトルを入力してください。"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
-const ISBNInputPage: React.FC = () => {
+const BookTitleInputPage: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
-  // 本のstate
-  const [book, setBook] = useState<{
+  // モーダルのstate
+  const [modalOpen, setModalOpen] = useState(false);
+  const [books, setBooks] = useState<Array<{
     imagePath: string;
     title: string;
     authors: string[];
-  } | null>(null);
+  }> | null>(null);
 
-  // モーダルのstate
-  const [modalOpen, setModalOpen] = useState(false);
+  const handleOpenModal = (
+    bookData: Array<{
+      imagePath: string;
+      title: string;
+      authors: string[];
+    }>,
+  ) => {
+    setBooks(bookData);
+    setModalOpen(true);
+  };
 
-  // navigateフックを追加
-  const navigate = useNavigate();
+  const handleCloseModal = () => setModalOpen(false);
 
-  // モーダルを開く関数
-  const handleOpenModal = (bookData: {
+  const handleConfirm = (book: {
     imagePath: string;
     title: string;
     authors: string[];
   }) => {
-    setBook(bookData);
-    setModalOpen(true);
-  };
-
-  // モーダルを閉じる関数
-  const handleCloseModal = () => setModalOpen(false);
-
-  // 確認ボタンを押したときの関数
-  // navigateを使って寄付確認ページに移動
-  const handleConfirm = () => {
     setModalOpen(false);
-    navigate("/donation/confirm-donation", { state: { book } }); // navigateに本の情報を渡す
+    console.log("Selected Book:", book);
+    navigate("/donation/confirm-donation", { state: { book } });
   };
 
   // サブミットハンドラー
@@ -71,16 +65,27 @@ const ISBNInputPage: React.FC = () => {
     console.log("Form Data:", data);
 
     // Mockの仮データ
-    // TODO: ここでGoogle Books APIの呼び出しやDBへの保存処理を実装する
-    const mockBook = {
-      imagePath: "/src/assets/book-open-svgrepo-com.svg",
-      title: "Sample Book",
-      authors: ["Author One", "Author Two"],
-    };
-    handleOpenModal(mockBook);
+    const mockBooks = [
+      {
+        imagePath: "/src/assets/book-open-svgrepo-com.svg",
+        title: "Sample Book 1",
+        authors: ["Author One"],
+      },
+      {
+        imagePath: "/src/assets/book-open-svgrepo-com.svg",
+        title: "Sample Book 2",
+        authors: ["Author Two"],
+      },
+      {
+        imagePath: "/src/assets/book-open-svgrepo-com.svg",
+        title: "Sample Book 3",
+        authors: ["Author Three"],
+      },
+    ];
+    handleOpenModal(mockBooks);
   };
 
-  // 戻るボタンのハンドラー
+  const navigate = useNavigate();
   const handleBack = () => navigate(-1);
 
   return (
@@ -89,7 +94,7 @@ const ISBNInputPage: React.FC = () => {
       sx={{ height: "80vh", display: "flex", flexDirection: "column" }}
     >
       <Typography variant="h5" align="center" gutterBottom>
-        ISBN 検索
+        タイトル検索
       </Typography>
       <Paper
         elevation={3}
@@ -109,7 +114,7 @@ const ISBNInputPage: React.FC = () => {
       >
         <CardMedia
           component="img"
-          src="/src/assets/barcode1-svgrepo-com.svg"
+          src="/src/assets/book-open-svgrepo-com.svg"
           alt="Book Icon"
           sx={{
             width: "100%",
@@ -120,10 +125,10 @@ const ISBNInputPage: React.FC = () => {
         />
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <TextField
-            label="ISBN"
-            {...register("isbn", { required: "ISBNは必須です。" })}
-            error={!!errors.isbn}
-            helperText={errors.isbn?.message}
+            label="タイトル"
+            {...register("book", { required: "タイトルは必須です。" })}
+            error={!!errors.book}
+            helperText={errors.book?.message}
             fullWidth
             margin="normal"
           />
@@ -142,15 +147,16 @@ const ISBNInputPage: React.FC = () => {
             検索
           </Button>
         </Box>
-        {book && (
-          <BookDetailsModal
+        {books && (
+          <BooksListModal
             open={modalOpen}
             onClose={handleCloseModal}
-            onConfirm={handleConfirm} // モーダルの確認ボタンを押したときの処理
-            book={book}
+            onConfirm={handleConfirm}
+            books={books}
           />
         )}
       </Paper>
+
       <Button
         variant="contained"
         color="secondary"
@@ -164,4 +170,4 @@ const ISBNInputPage: React.FC = () => {
   );
 };
 
-export default ISBNInputPage;
+export default BookTitleInputPage;
