@@ -11,11 +11,17 @@ import {
   Box,
 } from "@mui/material";
 
+interface Book {
+  imagePath: string;
+  title: string;
+  authors: string[];
+}
+
 interface BookDetailsModalProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  book: { imagePath: string; title: string; authors: string[] };
+  book: Book;
 }
 
 const BookDetailsModal: React.FC<BookDetailsModalProps> = ({

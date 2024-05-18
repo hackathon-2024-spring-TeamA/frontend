@@ -43,6 +43,10 @@ const ISBNInputPage: React.FC = () => {
   // モーダルのstate
   const [modalOpen, setModalOpen] = useState(false);
 
+  // navigateフックを追加
+  const navigate = useNavigate();
+
+  // モーダルを開く関数
   const handleOpenModal = (bookData: {
     imagePath: string;
     title: string;
@@ -52,11 +56,14 @@ const ISBNInputPage: React.FC = () => {
     setModalOpen(true);
   };
 
+  // モーダルを閉じる関数
   const handleCloseModal = () => setModalOpen(false);
 
+  // 確認ボタンを押したときの関数
+  // navigateを使って寄付確認ページに移動
   const handleConfirm = () => {
     setModalOpen(false);
-    navigate("/donation/confirm-donation");
+    navigate("/donation/confirm-donation", { state: { book } }); // navigateに本の情報を渡す
   };
 
   // サブミットハンドラー
@@ -73,7 +80,7 @@ const ISBNInputPage: React.FC = () => {
     handleOpenModal(mockBook);
   };
 
-  const navigate = useNavigate();
+  // 戻るボタンのハンドラー
   const handleBack = () => navigate(-1);
 
   return (
@@ -139,12 +146,11 @@ const ISBNInputPage: React.FC = () => {
           <BookDetailsModal
             open={modalOpen}
             onClose={handleCloseModal}
-            onConfirm={handleConfirm}
+            onConfirm={handleConfirm} // モーダルの確認ボタンを押したときの処理
             book={book}
           />
         )}
       </Paper>
-
       <Button
         variant="contained"
         color="secondary"
