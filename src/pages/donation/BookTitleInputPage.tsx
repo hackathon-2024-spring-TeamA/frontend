@@ -50,14 +50,14 @@ const BookTitleInputPage: React.FC = () => {
 
   const handleCloseModal = () => setModalOpen(false);
 
-  const handleConfirm = (selectedBook: {
+  const handleConfirm = (book: {
     imagePath: string;
     title: string;
     authors: string[];
   }) => {
     setModalOpen(false);
-    console.log("Selected Book:", selectedBook);
-    navigate("/donation/confirm-donation");
+    console.log("Selected Book:", book);
+    navigate("/donation/confirm-donation", { state: { book } });
   };
 
   // サブミットハンドラー
