@@ -36,7 +36,7 @@ const BarcodeScannerPage: React.FC = () => {
 
   const handleConfirm = () => {
     setModalOpen(false);
-    navigate("/donation/confirm-donation");
+    navigate("/donation/confirm-donation", { state: { book } });
   };
 
   return (
