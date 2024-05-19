@@ -9,14 +9,13 @@ import {
   Paper,
   CardMedia,
   Typography,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import BookDetailsModal from "@/components/Modal/BookDetailModal";
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { fetchBooksByIsbn } from "@/features/donation/googleBooksApi";
 
 // Zodのスキーマ定義
@@ -46,6 +45,7 @@ const ISBNInputPage: React.FC = () => {
   // モーダルのstate
   const [modalOpen, setModalOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
   // モーダルを開く関数
@@ -76,6 +76,7 @@ const ISBNInputPage: React.FC = () => {
       const bookData = await fetchBooksByIsbn(data.isbn);
       handleOpenModal(bookData);
     } catch (error) {
+      setSnackbarMessage("本が見つかりませんでした。");
       setSnackbarOpen(true);
     }
   };
@@ -159,20 +160,11 @@ const ISBNInputPage: React.FC = () => {
       >
         戻る
       </Button>
-      <Snackbar
+      <AlertSnackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        message={snackbarMessage}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          本が見つかりませんでした。
-        </Alert>
-      </Snackbar>
+      />
     </Container>
   );
 };

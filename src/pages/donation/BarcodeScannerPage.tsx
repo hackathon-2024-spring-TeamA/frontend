@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Typography,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import BookDetailsModal from "@/components/Modal/BookDetailModal";
 import BarcodeScanner from "@/components/Scanner/BarcodeScanner";
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { fetchBooksByIsbn } from "@/features/donation/googleBooksApi";
 
 const BarcodeScannerPage: React.FC = () => {
@@ -26,6 +19,7 @@ const BarcodeScannerPage: React.FC = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
   const handleBack = () => navigate(-1);
@@ -39,6 +33,7 @@ const BarcodeScannerPage: React.FC = () => {
       setBook(bookData);
       setModalOpen(true);
     } catch (error) {
+      setSnackbarMessage("本が見つかりませんでした。");
       setSnackbarOpen(true);
     }
   };
@@ -117,20 +112,11 @@ const BarcodeScannerPage: React.FC = () => {
       >
         戻る
       </Button>
-      <Snackbar
+      <AlertSnackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        message={snackbarMessage}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }} // 右上に表示
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          本が見つかりませんでした。
-        </Alert>
-      </Snackbar>
+      />
     </Container>
   );
 };

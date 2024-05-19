@@ -9,14 +9,13 @@ import {
   Paper,
   CardMedia,
   Typography,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import BooksListModal from "@/components/Modal/BookListModal";
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { fetchBooksByTitle } from "@/features/donation/googleBooksApi";
 
 const schema = z.object({
@@ -32,7 +31,6 @@ const BookTitleInputPage: React.FC = () => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
-  // モーダルのstate
   const [modalOpen, setModalOpen] = useState(false);
   const [books, setBooks] = useState<Array<{
     imagePath: string;
@@ -40,6 +38,7 @@ const BookTitleInputPage: React.FC = () => {
     authors: string[];
   }> | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
   const handleOpenModal = (
@@ -75,6 +74,7 @@ const BookTitleInputPage: React.FC = () => {
       const booksData = await fetchBooksByTitle(data.book);
       handleOpenModal(booksData);
     } catch (error) {
+      setSnackbarMessage("本が見つかりませんでした。");
       setSnackbarOpen(true);
     }
   };
@@ -86,7 +86,7 @@ const BookTitleInputPage: React.FC = () => {
       maxWidth="md"
       sx={{ height: "80vh", display: "flex", flexDirection: "column" }}
     >
-      <Typography variant="h5" align="center" gutterBottom component={"h3"}>
+      <Typography variant="h5" align="center" gutterBottom>
         タイトル検索
       </Typography>
       <Paper
@@ -159,20 +159,11 @@ const BookTitleInputPage: React.FC = () => {
       >
         戻る
       </Button>
-      <Snackbar
+      <AlertSnackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        message={snackbarMessage}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }} // 右上に表示
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          本が見つかりませんでした。
-        </Alert>
-      </Snackbar>
+      />
     </Container>
   );
 };
