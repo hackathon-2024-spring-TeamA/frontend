@@ -8,14 +8,18 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import { BookInformation } from "@/types/interface";
+import { BookRequest } from "@/types/interface";
 
 export const BookCard: React.FC<{
-  bookInfo: BookInformation;
+  bookRequest: BookRequest;
   loading: boolean;
-}> = ({ bookInfo, loading }) => (
+}> = ({ bookRequest, loading }) => (
   <Card sx={{ position: "relative", overflow: "hidden" }}>
-    <CardActionArea component={Link} to="/requests/detail">
+    <CardActionArea
+      component={Link}
+      to={`/requests/detail?requestId=${bookRequest.id}`}
+      state={{ bookRequest: bookRequest }}
+    >
       {loading ? (
         <Box
           sx={{
@@ -31,7 +35,7 @@ export const BookCard: React.FC<{
         <CardMedia
           component="img"
           height="300"
-          image={bookInfo.image_path}
+          image={bookRequest.book.book_information.image_path}
           alt="Book cover"
           sx={{ transition: "opacity 0.3s", "&:hover": { opacity: 0.5 } }}
         />
@@ -55,12 +59,17 @@ export const BookCard: React.FC<{
         }}
       >
         <Typography variant="h6" component="h3" gutterBottom>
-          {bookInfo.title}
+          {bookRequest.book.book_information.title}
         </Typography>
-        <Typography variant="body2">{bookInfo.author}</Typography>
-        <Typography variant="body2">{bookInfo.description}</Typography>
         <Typography variant="body2">
-          Published {bookInfo.published_date.toString()}
+          {bookRequest.book.book_information.author}
+        </Typography>
+        <Typography variant="body2">
+          {bookRequest.book.book_information.description}
+        </Typography>
+        <Typography variant="body2">
+          Published{" "}
+          {bookRequest.book.book_information.published_date.toString()}
         </Typography>
       </Box>
     </CardActionArea>
@@ -76,7 +85,7 @@ export const BookCard: React.FC<{
           textOverflow: "ellipsis",
         }}
       >
-        {bookInfo.title}
+        {bookRequest.book.book_information.title}
       </Typography>
     </Box>
   </Card>

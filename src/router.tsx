@@ -11,6 +11,7 @@ import ISBNInputPage from "./pages/donation/ISBNInputPage";
 import MainSelectionPage from "./pages/donation/MainSelectionPage";
 import MockCardsPage from "./pages/mock/MockCardsPage";
 import RequestBooksPage from "./pages/request/RequestBooksPage";
+import RequestDetailPage from "./pages/request/RequestDetailPage";
 
 import MainLayout from "@/components/Layout/MainLayout";
 import MockAboutPage from "@/pages/mock/MockAboutPage";
@@ -37,7 +38,7 @@ const router = createBrowserRouter(
           {/* リクエスト一覧 PATH */}
           {/* TODO: 各ページの作成  */}
           <Route index element={<RequestBooksPage />} />
-          {/* <Route path="selection" element={<MainSelectionPage />} /> */}
+          <Route path="detail" element={<RequestDetailPage />} />
         </Route>
       </Route>
       <Route path="/mock">
