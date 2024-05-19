@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 import BookDetailsModal from "@/components/Modal/BookDetailModal";
 import BarcodeScanner from "@/components/Scanner/BarcodeScanner";
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
+import { fetchBooksByIsbn } from "@/features/donation/googleBooksApi";
 
 const BarcodeScannerPage: React.FC = () => {
+  // todo: isbnの状態を消す
   const [isbn, setIsbn] = useState("");
   const [book, setBook] = useState<{
     imagePath: string;
@@ -15,28 +18,33 @@ const BarcodeScannerPage: React.FC = () => {
   } | null>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
   const handleBack = () => navigate(-1);
 
-  const handleScanSuccess = (scannedIsbn: string) => {
+  const handleScanSuccess = async (scannedIsbn: string) => {
     setIsbn(scannedIsbn);
     console.log(isbn);
 
-    // todo: google books apiの実装をここで行い、本を検索して取得する
-    // Mock仮データ
-    const mockBook = {
-      imagePath: "/src/assets/book-open-svgrepo-com.svg",
-      title: "Sample Book",
-      authors: ["Author One", "Author Two"],
-    };
-    setBook(mockBook);
-    setModalOpen(true);
+    try {
+      const bookData = await fetchBooksByIsbn(scannedIsbn);
+      setBook(bookData);
+      setModalOpen(true);
+    } catch (error) {
+      setSnackbarMessage("本が見つかりませんでした。");
+      setSnackbarOpen(true);
+    }
   };
 
   const handleConfirm = () => {
     setModalOpen(false);
     navigate("/donation/confirm-donation", { state: { book } });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -104,6 +112,11 @@ const BarcodeScannerPage: React.FC = () => {
       >
         戻る
       </Button>
+      <AlertSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+      />
     </Container>
   );
 };

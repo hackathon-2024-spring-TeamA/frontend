@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import BookDetailsModal from "@/components/Modal/BookDetailModal";
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
+import { fetchBooksByIsbn } from "@/features/donation/googleBooksApi";
 
 // Zodのスキーマ定義
 const schema = z.object({
@@ -42,8 +44,8 @@ const ISBNInputPage: React.FC = () => {
 
   // モーダルのstate
   const [modalOpen, setModalOpen] = useState(false);
-
-  // navigateフックを追加
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
   // モーダルを開く関数
@@ -59,28 +61,26 @@ const ISBNInputPage: React.FC = () => {
   // モーダルを閉じる関数
   const handleCloseModal = () => setModalOpen(false);
 
-  // 確認ボタンを押したときの関数
-  // navigateを使って寄付確認ページに移動
   const handleConfirm = () => {
     setModalOpen(false);
-    navigate("/donation/confirm-donation", { state: { book } }); // navigateに本の情報を渡す
+    navigate("/donation/confirm-donation", { state: { book } });
   };
 
-  // サブミットハンドラー
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log("Form Data:", data);
-
-    // Mockの仮データ
-    // TODO: ここでGoogle Books APIの呼び出しやDBへの保存処理を実装する
-    const mockBook = {
-      imagePath: "/src/assets/book-open-svgrepo-com.svg",
-      title: "Sample Book",
-      authors: ["Author One", "Author Two"],
-    };
-    handleOpenModal(mockBook);
+    try {
+      const bookData = await fetchBooksByIsbn(data.isbn);
+      handleOpenModal(bookData);
+    } catch (error) {
+      setSnackbarMessage("本が見つかりませんでした。");
+      setSnackbarOpen(true);
+    }
   };
 
-  // 戻るボタンのハンドラー
   const handleBack = () => navigate(-1);
 
   return (
@@ -146,7 +146,7 @@ const ISBNInputPage: React.FC = () => {
           <BookDetailsModal
             open={modalOpen}
             onClose={handleCloseModal}
-            onConfirm={handleConfirm} // モーダルの確認ボタンを押したときの処理
+            onConfirm={handleConfirm}
             book={book}
           />
         )}
@@ -160,6 +160,11 @@ const ISBNInputPage: React.FC = () => {
       >
         戻る
       </Button>
+      <AlertSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleCloseSnackbar}
+      />
     </Container>
   );
 };
