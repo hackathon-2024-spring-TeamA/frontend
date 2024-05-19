@@ -86,7 +86,7 @@ const BookTitleInputPage: React.FC = () => {
       maxWidth="md"
       sx={{ height: "80vh", display: "flex", flexDirection: "column" }}
     >
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography variant="h5" align="center" gutterBottom component={"h3"}>
         タイトル検索
       </Typography>
       <Paper
