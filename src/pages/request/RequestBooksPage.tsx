@@ -12,14 +12,15 @@ import { PaginationData } from "@/types/interface";
 const RequestBooksPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isMyRequest, setIsMyRequest] = useState(true);
+  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
 
   const { data, loading, error, refetch } = useQuery<{
     paginatedBookRequests: PaginationData;
   }>(PAGINATED_BOOK_REQUESTS, {
     variables: {
       page: currentPage,
-      perPage: 12,
-      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef", // ここは実際のユーザーIDに置き換える
+      perPage: 8,
+      userId, // ここは実際のユーザーIDに置き換える
       isMyRequest: isMyRequest,
     },
     fetchPolicy: "network-only",
@@ -47,26 +48,69 @@ const RequestBooksPage: React.FC = () => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 4,
+          mb: 0,
+        }}
+      >
         <Button
           variant={isMyRequest ? "contained" : "outlined"}
           onClick={() => handleTabChange(true)}
-          sx={{ mr: 2 }}
+          sx={{
+            borderRadius: "4px",
+            px: 4,
+            py: 2,
+            fontWeight: "bold",
+            textTransform: "none",
+            minWidth: "240px",
+            mb: { xs: 2, sm: 0 },
+            mr: { xs: 0, sm: 2 },
+            backgroundColor: isMyRequest ? "primary.main" : "white",
+            color: isMyRequest ? "white" : "primary.main",
+            border: "1px solid",
+            borderColor: "primary.main",
+            "&:hover": {
+              backgroundColor: isMyRequest ? "primary.dark" : "primary.light",
+            },
+          }}
         >
-          リクエスト
+          リクエストした本
         </Button>
         <Button
           variant={!isMyRequest ? "contained" : "outlined"}
           onClick={() => handleTabChange(false)}
+          sx={{
+            borderRadius: "4px",
+            px: 4,
+            py: 2,
+            fontWeight: "bold",
+            textTransform: "none",
+            minWidth: "240px",
+            backgroundColor: !isMyRequest ? "primary.main" : "white",
+            color: !isMyRequest ? "white" : "primary.main",
+            border: "1px solid",
+            borderColor: "primary.main",
+            "&:hover": {
+              backgroundColor: !isMyRequest ? "primary.dark" : "primary.light",
+            },
+          }}
         >
-          要対応
+          リクエストされた本
         </Button>
       </Box>
-      <BooksArea
-        bookRequests={data?.paginatedBookRequests.bookRequests || []}
-        loading={loading}
-      />
-      <Box mt={4} display="flex" justifyContent="center">
+      <Box mt={-2}>
+        <BooksArea
+          bookRequests={data?.paginatedBookRequests.bookRequests || []}
+          loading={loading}
+          userId={userId}
+        />
+      </Box>
+      <Box mt={-4} display="flex" justifyContent="center">
         <PaginationComponent
           totalCount={data?.paginatedBookRequests.totalCount || 0}
           currentPage={currentPage}
