@@ -18,8 +18,8 @@ export interface Book {
 export interface BookRequest {
   id: string;
   book: Book;
-  requester_id: number;
-  holder_id: number;
+  requester_id: string;
+  holder_id: string;
   request_date: Date;
   status: "requested" | "sending" | "arrived";
 }
