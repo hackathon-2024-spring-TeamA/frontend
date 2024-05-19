@@ -9,12 +9,15 @@ import {
   Paper,
   CardMedia,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import BooksListModal from "@/components/Modal/BookListModal";
+import { fetchBooksByTitle } from "@/features/donation/googleBooksApi";
 
 const schema = z.object({
   book: z.string().min(1, "タイトルを入力してください。"),
@@ -36,6 +39,8 @@ const BookTitleInputPage: React.FC = () => {
     title: string;
     authors: string[];
   }> | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpenModal = (
     bookData: Array<{
@@ -60,32 +65,20 @@ const BookTitleInputPage: React.FC = () => {
     navigate("/donation/confirm-donation", { state: { book } });
   };
 
-  // サブミットハンドラー
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("Form Data:", data);
-
-    // Mockの仮データ
-    const mockBooks = [
-      {
-        imagePath: "/src/assets/book-open-svgrepo-com.svg",
-        title: "Sample Book 1",
-        authors: ["Author One"],
-      },
-      {
-        imagePath: "/src/assets/book-open-svgrepo-com.svg",
-        title: "Sample Book 2",
-        authors: ["Author Two"],
-      },
-      {
-        imagePath: "/src/assets/book-open-svgrepo-com.svg",
-        title: "Sample Book 3",
-        authors: ["Author Three"],
-      },
-    ];
-    handleOpenModal(mockBooks);
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
-  const navigate = useNavigate();
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log("Form Data:", data);
+    try {
+      const booksData = await fetchBooksByTitle(data.book);
+      handleOpenModal(booksData);
+    } catch (error) {
+      setSnackbarOpen(true);
+    }
+  };
+
   const handleBack = () => navigate(-1);
 
   return (
@@ -166,6 +159,20 @@ const BookTitleInputPage: React.FC = () => {
       >
         戻る
       </Button>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }} // 右上に表示
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          本が見つかりませんでした。
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
