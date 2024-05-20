@@ -90,9 +90,6 @@ export const BookCard: React.FC<{
             {bookRequest.book.book_information.author}
           </Typography>
           <Typography variant="body2">
-            {bookRequest.book.book_information.description}
-          </Typography>
-          <Typography variant="body2">
             Published{" "}
             {bookRequest.book.book_information.published_date.toString()}
           </Typography>
