@@ -10,7 +10,7 @@ export interface BookInformation {
 
 export interface Book {
   id: number;
-  user_id: number;
+  user_id: string;
   book_information: BookInformation;
   donation_date: Date;
 }
@@ -29,4 +29,26 @@ export interface PaginationData {
   currentPage: number;
   perPage: number;
   bookRequests: BookRequest[];
+}
+
+// 下記検索機能で追加
+export interface Book {
+  latest_book_loan: BookLoan;
+}
+
+export interface BookLoan {
+  id: string;
+  user_id: string;
+  book_id: number;
+  rent_date: Date;
+  due_date: Date;
+  return_date: Date | null;
+  is_held: boolean;
+}
+
+export interface SearchPaginationData {
+  totalCount: number;
+  currentPage: number;
+  perPage: number;
+  books: Book[];
 }
