@@ -21,6 +21,30 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const truncateTitle = (title: string, maxLines: number) => {
+    const words = title.split(" ");
+    const lines = [];
+    let currentLine = "";
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      if (`${currentLine} ${word}`.length <= 20) {
+        currentLine = `${currentLine} ${word}`;
+      } else {
+        lines.push(currentLine.trim());
+        currentLine = word;
+      }
+    }
+
+    lines.push(currentLine.trim());
+
+    if (lines.length > maxLines) {
+      return `${lines.slice(0, maxLines).join(" ")}...`;
+    }
+
+    return title;
+  };
+
   return (
     <>
       <Card
@@ -91,13 +115,20 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               }}
             >
               <Typography variant="h6" component="h3" gutterBottom>
-                {book.book_information.title}
+                {truncateTitle(book.book_information.title, 5)}
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body2"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {book.book_information.author}
               </Typography>
               <Typography variant="body2">
-                Published {book.book_information.published_date.toString()}
+                出版日: {book.book_information.published_date.toString()}
               </Typography>
             </Box>
           </CardActionArea>
