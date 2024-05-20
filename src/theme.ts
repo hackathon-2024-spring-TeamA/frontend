@@ -10,7 +10,7 @@ const theme = createTheme({
       styleOverrides: {
         body: {
           backgroundImage: 'url("/src/assets/images/background_image.png")',
-          // backgroundSize: "cover",
+          backgroundSize: "cover",
           // backgroundPosition: "top-left",
           backgroundRepeat: "no-repeat",
           height: "100%",
@@ -18,6 +18,10 @@ const theme = createTheme({
           position: "fixed",
           top: 0,
           left: 0,
+          "@media (max-width:600px)": {
+            backgroundImage:
+              'url("/src/assets/images/background_image_mobile.png")',
+          },
         },
       },
     },
@@ -25,7 +29,7 @@ const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#3f51b5",
+      main: "#000000",
     },
     secondary: {
       main: "#f50057",

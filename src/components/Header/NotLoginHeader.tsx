@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 
-const Header: React.FC = () => {
+const NotLoginHeader: React.FC = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky">
@@ -23,4 +23,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default NotLoginHeader;
