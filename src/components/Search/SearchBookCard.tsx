@@ -12,6 +12,7 @@ import {
   Paper,
   Button,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import { Book } from "@/types/interface";
 
@@ -94,6 +95,16 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
         }
       }
     }
+  };
+
+  const bookData = {
+    imagePath: book.book_information.image_path,
+    title: book.book_information.title,
+    author: book.book_information.author,
+    bookId: book.id,
+    holderId: book.latest_book_loan
+      ? book.latest_book_loan.user_id
+      : book.user_id,
   };
 
   return (
@@ -356,17 +367,17 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                 }}
               >
                 {getBookStatus(book).label === "貸出可能" && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    sx={{ mb: 2 }}
-                    onClick={() => {
-                      // 本を借りる処理を追加
-                    }}
-                  >
-                    借りる
-                  </Button>
+                  <Link to="/confirm-loan" state={{ book: bookData }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      sx={{ mb: 2 }}
+                      fullWidth
+                    >
+                      借りる
+                    </Button>
+                  </Link>
                 )}
                 <Button
                   variant="contained"

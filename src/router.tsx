@@ -12,6 +12,7 @@ import MainSelectionPage from "./pages/donation/MainSelectionPage";
 import MockCardsPage from "./pages/mock/MockCardsPage";
 import RequestBooksPage from "./pages/request/RequestBooksPage";
 import RequestDetailPage from "./pages/request/RequestDetailPage";
+import LoanConfirmationPage from "./pages/search/LoanConfirmationPage";
 import SearchBooksPage from "./pages/search/SearchBooksPage";
 
 import MainLayout from "@/components/Layout/MainLayout";
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="/">
         {/* 作成した本番用Pageコンポーネントを配置 */}
         <Route index element={<SearchBooksPage />} />
+        <Route path="confirm-loan" element={<LoanConfirmationPage />} />
         <Route path="donation">
           {/* 寄付機能 PATH */}
           <Route path="selection" element={<MainSelectionPage />} />
