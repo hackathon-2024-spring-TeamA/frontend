@@ -21,7 +21,7 @@ export const BooksArea: React.FC<BooksAreaProps> = ({
   return (
     <Box py={8}>
       <Box maxWidth="xl" mx="auto" px={4}>
-        <Box bgcolor="grey.100" p={4}>
+        <Box bgcolor="grey.100" p={4} borderRadius="10px">
           <Grid
             container
             spacing={4}

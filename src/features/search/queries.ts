@@ -1,3 +1,4 @@
+// queries.ts
 import { gql } from "@apollo/client";
 
 export const SEARCH_BOOKS = gql`
@@ -27,6 +28,16 @@ export const SEARCH_BOOKS = gql`
           due_date
           return_date
           is_held
+        }
+        latest_book_request {
+          id
+          book {
+            id
+          }
+          requester_id
+          holder_id
+          request_date
+          status
         }
       }
     }
