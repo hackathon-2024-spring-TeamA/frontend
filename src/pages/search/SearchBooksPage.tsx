@@ -47,7 +47,7 @@ const SearchBooksPage: React.FC = () => {
             onSearchChange={handleSearchChange}
           />
         </Box>
-        <Box bgcolor="grey.100" p={4}>
+        <Box bgcolor="grey.100" p={4} borderRadius="10px">
           <Grid container spacing={4}>
             {loading ? (
               <Grid item xs={12} display="flex" justifyContent="center">

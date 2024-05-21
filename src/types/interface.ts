@@ -33,7 +33,8 @@ export interface PaginationData {
 
 // 下記検索機能で追加
 export interface Book {
-  latest_book_loan: BookLoan;
+  latest_book_loan: BookLoan | null;
+  latest_book_request: BookRequest | null;
 }
 
 export interface BookLoan {

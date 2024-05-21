@@ -45,6 +45,57 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
     return title;
   };
 
+  const getBookStatus = (book: Book) => {
+    if (!book.latest_book_loan) {
+      if (book.latest_book_request) {
+        return {
+          label: "貸出処理中",
+          color: "rgba(128, 128, 128, 0.3)",
+          deadline: "期限:未定",
+        };
+      } else {
+        return {
+          label: "貸出可能",
+          color: "rgba(144, 238, 144, 0.3)",
+          deadline: "\u00A0",
+        };
+      }
+    } else {
+      const dueDate = new Date(book.latest_book_loan.due_date);
+      const deadline = new Date(dueDate);
+      deadline.setDate(deadline.getDate() + 1);
+      deadline.setHours(12, 30, 0, 0);
+
+      const today = new Date();
+
+      if (today < deadline) {
+        return {
+          label: "貸出中",
+          color: "rgba(255, 0, 0, 0.1)",
+          deadline: `期限:${deadline.toLocaleDateString()} 12:30`,
+        };
+      } else {
+        if (
+          book.latest_book_request &&
+          (book.latest_book_request.status === "requested" ||
+            book.latest_book_request.status === "sending")
+        ) {
+          return {
+            label: "貸出処理中",
+            color: "rgba(128, 128, 128, 0.3)",
+            deadline: "期限:未定",
+          };
+        } else {
+          return {
+            label: "貸出可能",
+            color: "rgba(144, 238, 144, 0.3)",
+            deadline: "\u00A0",
+          };
+        }
+      }
+    }
+  };
+
   return (
     <>
       <Card
@@ -57,7 +108,7 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
             transform: "scale(1.05)",
             boxShadow: "0 12px 24px rgba(0, 0, 0, 0.3)",
           },
-          ...(book.latest_book_loan?.is_held && {
+          ...(getBookStatus(book).label !== "貸出可能" && {
             filter: "brightness(80%)",
           }),
         }}
@@ -114,21 +165,17 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                 "&:hover": { opacity: 1 },
               }}
             >
-              <Typography variant="h6" component="h3" gutterBottom>
+              <Typography variant="h5" component="h3" gutterBottom>
                 {truncateTitle(book.book_information.title, 5)}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
+              <Typography variant="body1">
                 {book.book_information.author}
               </Typography>
-              <Typography variant="body2">
-                出版日: {book.book_information.published_date.toString()}
+              <Typography variant="body1">
+                出版日:{" "}
+                {new Date(
+                  book.book_information.published_date,
+                ).toLocaleDateString("ja-JP")}
               </Typography>
             </Box>
           </CardActionArea>
@@ -138,24 +185,27 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               px: 2,
               py: 0.5,
               borderRadius: "9999px",
-              backgroundColor: book.latest_book_loan?.is_held
-                ? "rgba(255, 0, 0, 0.1)"
-                : "rgba(144, 238, 144, 0.3)",
-              color: book.latest_book_loan?.is_held ? "red" : "green",
+              backgroundColor: getBookStatus(book).color,
+              color:
+                getBookStatus(book).label === "貸出処理中"
+                  ? "black"
+                  : getBookStatus(book).label === "貸出可能"
+                    ? "green"
+                    : "red",
               textAlign: "center",
               fontSize: "0.8rem",
               width: "100%",
             }}
           >
-            {book.latest_book_loan?.is_held ? "貸出中" : "貸出可能"}
+            {getBookStatus(book).label}
           </Box>
         </Box>
         <Box
           sx={{
             px: 2,
-            py: 1,
-            minHeight: "3em",
+            py: 0,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -169,9 +219,22 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               whiteSpace: "nowrap",
               textAlign: "center",
               width: "100%",
+              mt: -1,
             }}
           >
             {book.book_information.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: "center",
+              width: "100%",
+              color: "text.secondary",
+              mt: 0.5,
+              mb: 0.5,
+            }}
+          >
+            {getBookStatus(book).deadline}
           </Typography>
         </Box>
       </Card>
@@ -265,18 +328,24 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                   py: 1,
                   px: 3,
                   borderRadius: "9999px",
-                  backgroundColor: book.latest_book_loan?.is_held
-                    ? "rgba(255, 0, 0, 0.1)"
-                    : "rgba(144, 238, 144, 0.3)",
-                  color: book.latest_book_loan?.is_held ? "red" : "green",
+                  backgroundColor: getBookStatus(book).color,
+                  color:
+                    getBookStatus(book).label === "貸出処理中"
+                      ? "black"
+                      : getBookStatus(book).label === "貸出可能"
+                        ? "green"
+                        : "red",
                   textAlign: "center",
                   fontSize: "1rem",
                   width: "fit-content",
                   mb: 2,
                 }}
               >
-                {book.latest_book_loan?.is_held ? "貸出中" : "貸出可能"}
+                {getBookStatus(book).label}
               </Box>
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                {getBookStatus(book).deadline}
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -286,7 +355,7 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                   mt: "auto",
                 }}
               >
-                {!book.latest_book_loan?.is_held && (
+                {getBookStatus(book).label === "貸出可能" && (
                   <Button
                     variant="contained"
                     color="primary"
