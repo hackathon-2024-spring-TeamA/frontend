@@ -10,7 +10,7 @@ import User_option from "/src/assets/images/user_option.png";
 import Book_management from "/src/assets/images/book_management.png";
 import Book_donation from "/src/assets/images/book_donation.png";
 import Logout from "/src/assets/images/logout.png";
-import Tech_libra from "/src/assets/images/tech-libra.png";
+import Tech_libra_header from "/src/assets/images/tech_libra_header.png";
 
 import Drawer from "@mui/material/Drawer"; // 追加
 import IconButton from "@mui/material/IconButton";
@@ -58,14 +58,13 @@ const Header: React.FC = () => {
               <Box sx={{ flexGrow: 1 }}>
                 <Button color="inherit">
                   <img
-                    src={Tech_libra}
+                    src={Tech_libra_header}
                     style={{
-                      width: "50px",
+                      width: "206.05px",
                       height: "50px",
                       marginRight: "10px",
                     }}
                   />
-                  tech-libra
                 </Button>
               </Box>
               <IconButton
@@ -139,14 +138,12 @@ const Header: React.FC = () => {
               <Box sx={{ flexGrow: 1 }}>
                 <Button color="inherit">
                   <img
-                    src={Tech_libra}
+                    src={Tech_libra_header}
                     style={{
-                      width: "50px",
+                      width: "206.05px",
                       height: "50px",
-                      marginRight: "10px",
                     }}
                   />
-                  tech-libra
                 </Button>
               </Box>
               <Box>
