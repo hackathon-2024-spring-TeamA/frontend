@@ -24,9 +24,20 @@ const RequestDetailPage: React.FC = () => {
   });
 
   const handleConfirmAction = async (status: string) => {
-    await updateBookRequestStatus({
-      variables: { requestId: bookRequest.id, status },
-    });
+    if (status === "arrived") {
+      await updateBookRequestStatus({
+        variables: {
+          requestId: bookRequest.id,
+          status,
+          userId: userId,
+          bookId: parseInt(bookRequest.book.id),
+        },
+      });
+    } else {
+      await updateBookRequestStatus({
+        variables: { requestId: bookRequest.id, status },
+      });
+    }
     await refetch({ requestId: bookRequest.id });
     setModalOpen(false);
   };
