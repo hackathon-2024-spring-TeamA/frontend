@@ -33,10 +33,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
 
   if (error) return <p>Error: {error.message}</p>;
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    page: number,
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
@@ -82,4 +79,5 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   );
 };
 
-export default withAuthenticator(SearchBooksPage);
+const SearchBooksPageWithAuthenticator = withAuthenticator(SearchBooksPage);
+export default SearchBooksPageWithAuthenticator;

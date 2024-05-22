@@ -55,10 +55,7 @@ const RequestBooksPage: React.FC = () => {
 
   if (error) return <p>Error: {error.message}</p>;
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    page: number,
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
