@@ -1,9 +1,11 @@
+import { Amplify } from "aws-amplify";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
 
+import awsExports from "./aws-exports";
 import BarcodeScannerPage from "./pages/donation/BarcodeScannerPage";
 import BookTitleInputPage from "./pages/donation/BookTitleInputPage";
 import DonationConfirmationPage from "./pages/donation/DonationConfirmationPage";
@@ -19,6 +21,8 @@ import MainLayout from "@/components/Layout/MainLayout";
 import MockAboutPage from "@/pages/mock/MockAboutPage";
 import MockGqlPage from "@/pages/mock/MockGqlPage";
 import MockHomePage from "@/pages/mock/MockHomePage";
+
+Amplify.configure(awsExports);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
