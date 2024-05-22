@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 import { useQuery } from "@apollo/client";
+import {
+  withAuthenticator,
+  WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { Box, Grid, CircularProgress } from "@mui/material";
 
 import { PaginationComponent } from "../../components/Common/Pagination";
@@ -10,9 +14,12 @@ import { SearchBookCard } from "../../components/Search/SearchBookCard";
 import { SEARCH_BOOKS } from "@/features/search/queries";
 import { SearchPaginationData } from "@/types/interface";
 
-const SearchBooksPage: React.FC = () => {
+import "@aws-amplify/ui-react/styles.css";
+
+const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  console.log(user);
 
   const { data, loading, error } = useQuery<{
     searchBooks: SearchPaginationData;
@@ -26,10 +33,7 @@ const SearchBooksPage: React.FC = () => {
 
   if (error) return <p>Error: {error.message}</p>;
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    page: number,
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
@@ -75,4 +79,5 @@ const SearchBooksPage: React.FC = () => {
   );
 };
 
-export default SearchBooksPage;
+const SearchBooksPageWithAuthenticator = withAuthenticator(SearchBooksPage);
+export default SearchBooksPageWithAuthenticator;
