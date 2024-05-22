@@ -6,6 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "types": ["vitest/globals"],
+    "allowJs": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
