@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@apollo/client";
 import {
   Container,
   Typography,
@@ -12,13 +13,16 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
+import { CREATE_BOOK_REQUEST } from "@/features/loan/mutations";
+
 // 本の情報の型を定義
 interface BookData {
   imagePath: string;
   title: string;
   author: string;
   bookId: number;
-  userId: string;
+  holderId: string;
 }
 
 const LoanConfirmationPage: React.FC = () => {
@@ -26,8 +30,18 @@ const LoanConfirmationPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { book } = location.state as { book: BookData };
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "error" | "warning" | "info" | "success"
+  >("error");
 
-  if (!location.state) {
+  const [createBookRequest, { loading }] = useMutation(CREATE_BOOK_REQUEST);
+
+  // サンプルのユーザーID
+  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
+
+  if (!book) {
     return (
       <Container maxWidth="md">
         <Box
@@ -69,16 +83,41 @@ const LoanConfirmationPage: React.FC = () => {
 
   const handleBack = () => navigate(-1);
 
-  const handleLoan = () => {
+  const handleLoan = async () => {
     if (isConfirmed) {
-      // ここで本の貸出処理を行います
-      console.log("Loaning the book:", book);
-      // 貸出処理後、完了ページやメインページに遷移するなど
-      // todo: 仮でリクエスト一覧へ遷移する スナックバーとかも表示したい。
-      navigate("/requests");
+      try {
+        const { data } = await createBookRequest({
+          variables: {
+            request: {
+              bookId: book.bookId,
+              holderId: book.holderId,
+              requesterId: userId,
+            },
+          },
+        });
+
+        if (data.createBookRequest.isSuccess) {
+          navigate("/requests", {
+            state: { message: "リクエストに成功しました。" },
+          });
+        } else {
+          setSnackbarMessage(data.createBookRequest.errorMessage);
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+        }
+      } catch (error) {
+        console.error("Error creating book request:", error);
+        setSnackbarMessage("リクエストの作成中にエラーが発生しました。");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      }
     } else {
       alert("Please confirm the loan by checking the box.");
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -208,9 +247,9 @@ const LoanConfirmationPage: React.FC = () => {
           <Button
             variant="contained"
             onClick={handleLoan}
-            disabled={!isConfirmed}
+            disabled={!isConfirmed || loading}
           >
-            借りる
+            {loading ? "借りる..." : "借りる"}
           </Button>
         </Box>
       </Paper>
@@ -223,6 +262,12 @@ const LoanConfirmationPage: React.FC = () => {
       >
         戻る
       </Button>
+      <AlertSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={handleCloseSnackbar}
+      />
     </Container>
   );
 };

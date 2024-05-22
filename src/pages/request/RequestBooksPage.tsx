@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useQuery } from "@apollo/client";
 import { Box, Button } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 import { BooksArea } from "../../components/Book/BooksArea";
 import { PaginationComponent } from "../../components/Common/Pagination";
 
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { PAGINATED_BOOK_REQUESTS } from "@/features/request/queries";
 import { PaginationData } from "@/types/interface";
 
@@ -13,6 +15,31 @@ const RequestBooksPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isMyRequest, setIsMyRequest] = useState(true);
   const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
+  const location = useLocation();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity] = useState<"error" | "warning" | "info" | "success">(
+    "success",
+  );
+
+  useEffect(() => {
+    if (location.state && location.state.message) {
+      setSnackbarMessage(location.state.message);
+      setSnackbarOpen(true);
+      // 3秒後にスナックバーを自動的に閉じる
+      const timer = setTimeout(() => {
+        setSnackbarOpen(false);
+      }, 3000);
+      // クリーンアップ関数でタイマーをクリアする
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    // ページの更新や戻る操作をした際に、`location.state`をクリアする
+    window.history.replaceState(null, "");
+  }, []);
 
   const { data, loading, error, refetch } = useQuery<{
     paginatedBookRequests: PaginationData;
@@ -20,7 +47,7 @@ const RequestBooksPage: React.FC = () => {
     variables: {
       page: currentPage,
       perPage: 8,
-      userId, // ここは実際のユーザーIDに置き換える
+      userId,
       isMyRequest: isMyRequest,
     },
     fetchPolicy: "network-only",
@@ -40,10 +67,14 @@ const RequestBooksPage: React.FC = () => {
     setCurrentPage(1);
     refetch({
       page: 1,
-      perPage: 12,
+      perPage: 8,
       userId: "your_user_id",
       isMyRequest: myRequest,
     });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -81,6 +112,7 @@ const RequestBooksPage: React.FC = () => {
         >
           リクエストした本
         </Button>
+
         <Button
           variant={!isMyRequest ? "contained" : "outlined"}
           onClick={() => handleTabChange(false)}
@@ -103,6 +135,7 @@ const RequestBooksPage: React.FC = () => {
           リクエストされた本
         </Button>
       </Box>
+
       <Box mt={-2}>
         <BooksArea
           bookRequests={data?.paginatedBookRequests.bookRequests || []}
@@ -110,6 +143,7 @@ const RequestBooksPage: React.FC = () => {
           userId={userId}
         />
       </Box>
+
       <Box mt={-4} display="flex" justifyContent="center">
         <PaginationComponent
           totalCount={data?.paginatedBookRequests.totalCount || 0}
@@ -118,6 +152,13 @@ const RequestBooksPage: React.FC = () => {
           onPageChange={handlePageChange}
         />
       </Box>
+
+      <AlertSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={handleCloseSnackbar}
+      />
     </Box>
   );
 };
