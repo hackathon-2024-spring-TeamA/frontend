@@ -46,6 +46,30 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
     return title;
   };
 
+  const truncateAuthor = (author: string, maxLines: number) => {
+    const words = author.split(" ");
+    const lines = [];
+    let currentLine = "";
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      if (`${currentLine} ${word}`.length <= 20) {
+        currentLine = `${currentLine} ${word}`;
+      } else {
+        lines.push(currentLine.trim());
+        currentLine = word;
+      }
+    }
+
+    lines.push(currentLine.trim());
+
+    if (lines.length > maxLines) {
+      return `${lines.slice(0, maxLines).join(" ")}...`;
+    }
+
+    return author;
+  };
+
   const getBookStatus = (book: Book) => {
     if (!book.latest_book_loan) {
       if (book.latest_book_request) {
@@ -180,7 +204,7 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                 {truncateTitle(book.book_information.title, 5)}
               </Typography>
               <Typography variant="body1">
-                {book.book_information.author}
+                {truncateAuthor(book.book_information.author, 3)}
               </Typography>
               <Typography variant="body1">
                 出版日:{" "}
