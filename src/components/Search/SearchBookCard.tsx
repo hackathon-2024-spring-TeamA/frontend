@@ -22,6 +22,10 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // TODO User
+  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
+  console.log(userId);
+
   const truncateTitle = (title: string, maxLines: number) => {
     const words = title.split(" ");
     const lines = [];

@@ -33,6 +33,14 @@ const RequestDetailPage: React.FC = () => {
           bookId: parseInt(bookRequest.book.id),
         },
       });
+    } else if (status === "sending") {
+      await updateBookRequestStatus({
+        variables: {
+          requestId: bookRequest.id,
+          status,
+          bookId: parseInt(bookRequest.book.id),
+        },
+      });
     } else {
       await updateBookRequestStatus({
         variables: { requestId: bookRequest.id, status },
