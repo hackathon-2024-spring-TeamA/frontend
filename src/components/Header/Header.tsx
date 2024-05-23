@@ -89,8 +89,6 @@ const Header: React.FC = () => {
                   },
                 }}
               >
-                {" "}
-                {/* 追加 */}
                 <Box sx={{ width: 250 }}>
                   <List>
                     <ListItem button>
