@@ -9,7 +9,7 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundImage: 'url("/src/assets/images/background_image.png")',
+          backgroundImage: 'url("./assets/images/background_image.png")',
           // backgroundSize: "cover",
           // backgroundPosition: "top-left",
           backgroundRepeat: "no-repeat",
