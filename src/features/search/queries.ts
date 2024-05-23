@@ -1,4 +1,3 @@
-// queries.ts
 import { gql } from "@apollo/client";
 
 export const SEARCH_BOOKS = gql`
