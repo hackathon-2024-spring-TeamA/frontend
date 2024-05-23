@@ -12,6 +12,7 @@ import { SearchInput } from "../../components/Common/SearchInput";
 import { SearchBookCard } from "../../components/Search/SearchBookCard";
 
 import { SEARCH_BOOKS } from "@/features/search/queries";
+import { GET_USER_NICKNAME } from "@/features/user/queries";
 import { SearchPaginationData } from "@/types/interface";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -19,7 +20,13 @@ import "@aws-amplify/ui-react/styles.css";
 const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  console.log(user);
+
+  console.log(user?.userId);
+  const { data: userNicknameData } = useQuery(GET_USER_NICKNAME, {
+    variables: { userId: user?.userId },
+  });
+  const nickname = userNicknameData?.getUserNickname;
+  console.log(nickname);
 
   const { data, loading, error } = useQuery<{
     searchBooks: SearchPaginationData;
