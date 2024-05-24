@@ -20,9 +20,6 @@ import { SearchPaginationData } from "@/types/interface";
 import "@aws-amplify/ui-react/styles.css";
 
 const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,6 +30,10 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state, navigate, location.pathname]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
