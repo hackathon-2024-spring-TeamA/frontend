@@ -50,6 +50,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
       perPage: 8,
       searchQuery: searchQuery,
     },
+    fetchPolicy: "network-only",
   });
 
   if (error) return <p>Error: {error.message}</p>;
