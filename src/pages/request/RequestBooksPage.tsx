@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 
 import { useQuery } from "@apollo/client";
-import { Box, Button } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Card,
+  CardContent,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { BooksArea } from "../../components/Book/BooksArea";
@@ -27,17 +35,14 @@ const RequestBooksPage: React.FC = () => {
     if (location.state && location.state.message) {
       setSnackbarMessage(location.state.message);
       setSnackbarOpen(true);
-      // 3秒後にスナックバーを自動的に閉じる
       const timer = setTimeout(() => {
         setSnackbarOpen(false);
       }, 3000);
-      // クリーンアップ関数でタイマーをクリアする
       return () => clearTimeout(timer);
     }
   }, [location.state]);
 
   useEffect(() => {
-    // ページの更新や戻る操作をした際に、`location.state`をクリアする
     window.history.replaceState(null, "");
   }, []);
 
@@ -133,12 +138,50 @@ const RequestBooksPage: React.FC = () => {
         </Button>
       </Box>
 
-      <Box mt={-2}>
-        <BooksArea
-          bookRequests={data?.paginatedBookRequests.bookRequests || []}
-          loading={loading}
-          userId={userId}
-        />
+      <Box mt={2}>
+        {loading ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : data?.paginatedBookRequests.bookRequests.length === 0 ? (
+          <Box display="flex" justifyContent="center">
+            <Card
+              sx={{
+                width: "100%",
+                maxWidth: "md",
+                backgroundColor: "grey.200",
+                mt: 6,
+                borderRadius: "8px",
+                boxShadow: 3,
+              }}
+            >
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  py: 4,
+                }}
+              >
+                <InfoIcon
+                  sx={{ fontSize: 40, mb: 2, color: "text.secondary" }}
+                />
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 4, color: "text.secondary" }}
+                >
+                  まだリクエストがありません。
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
+        ) : (
+          <BooksArea
+            bookRequests={data?.paginatedBookRequests.bookRequests || []}
+            loading={loading}
+            userId={userId}
+          />
+        )}
       </Box>
 
       <Box mt={-4} display="flex" justifyContent="center">
