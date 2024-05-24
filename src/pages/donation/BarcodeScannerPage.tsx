@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -121,4 +125,5 @@ const BarcodeScannerPage: React.FC = () => {
   );
 };
 
-export default BarcodeScannerPage;
+const AuthenticatedBarcodeScannerPage = withAuthenticator(BarcodeScannerPage);
+export default AuthenticatedBarcodeScannerPage;

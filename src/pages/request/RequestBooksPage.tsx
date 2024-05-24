@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import { useQuery } from "@apollo/client";
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
@@ -203,4 +207,5 @@ const RequestBooksPage: React.FC = () => {
   );
 };
 
-export default RequestBooksPage;
+const AuthenticatedRequestBooksPage = withAuthenticator(RequestBooksPage);
+export default AuthenticatedRequestBooksPage;

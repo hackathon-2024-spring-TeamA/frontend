@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -169,4 +173,5 @@ const ISBNInputPage: React.FC = () => {
   );
 };
 
-export default ISBNInputPage;
+const AuthenticatedISBNInputPage = withAuthenticator(ISBNInputPage);
+export default AuthenticatedISBNInputPage;

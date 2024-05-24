@@ -2,6 +2,10 @@ import React, { useState } from "react";
 
 import { useMutation } from "@apollo/client";
 import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
+import {
   Container,
   Typography,
   Box,
@@ -272,4 +276,6 @@ const LoanConfirmationPage: React.FC = () => {
   );
 };
 
-export default LoanConfirmationPage;
+const AuthenticatedLoanConfirmationPage =
+  withAuthenticator(LoanConfirmationPage);
+export default AuthenticatedLoanConfirmationPage;
