@@ -107,7 +107,7 @@ const BookTitleInputPage: React.FC = () => {
       >
         <CardMedia
           component="img"
-          src="/src/assets/book-open-svgrepo-com.svg"
+          src="https://tech-libra-images.s3.ap-northeast-1.amazonaws.com/book-open-svgrepo-com.svg"
           alt="Book Icon"
           sx={{
             width: "100%",

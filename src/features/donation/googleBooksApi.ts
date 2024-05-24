@@ -34,7 +34,7 @@ export const fetchBooksByTitle = async (title: string): Promise<BookInfo[]> => {
         return {
           imagePath:
             bookInfo.imageLinks?.thumbnail ||
-            "/src/assets/book-open-svgrepo-com.svg",
+            "https://tech-libra-images.s3.ap-northeast-1.amazonaws.com/book-open-svgrepo-com.svg",
           title: bookInfo.title,
           authors: bookInfo.authors || ["Unknown Author"],
         };
@@ -58,7 +58,7 @@ export const fetchBooksByIsbn = async (isbn: string) => {
       return {
         imagePath:
           bookInfo.imageLinks?.thumbnail ||
-          "/src/assets/book-open-svgrepo-com.svg",
+          "https://tech-libra-images.s3.ap-northeast-1.amazonaws.com/book-open-svgrepo-com.svg",
         title: bookInfo.title,
         authors: bookInfo.authors || ["Unknown Author"],
       };

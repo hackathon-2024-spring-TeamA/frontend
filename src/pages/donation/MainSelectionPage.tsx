@@ -26,7 +26,7 @@ const MainSelectionPage: React.FC = () => {
           <ActionAreaCard
             title="タイトル検索"
             description="本のタイトルを入力して本の検索を行います"
-            imagePath="/src/assets/book-open-svgrepo-com.svg"
+            imagePath="https://tech-libra-images.s3.ap-northeast-1.amazonaws.com/book-open-svgrepo-com.svg"
             imageAlt="画像検索"
             targetPath="/donation/input-book-title"
           />
@@ -35,7 +35,7 @@ const MainSelectionPage: React.FC = () => {
           <ActionAreaCard
             title="ISBN検索"
             description="バーコードの下の文字(ISBN)を入力して本の検索を行います"
-            imagePath="/src/assets/barcode1-svgrepo-com.svg"
+            imagePath="https://tech-libra-images.s3.ap-northeast-1.amazonaws.com/barcode1-svgrepo-com.svg"
             imageAlt="ISBN検索"
             targetPath="/donation/input-isbn"
           />
@@ -44,7 +44,7 @@ const MainSelectionPage: React.FC = () => {
           <ActionAreaCard
             title="バーコードスキャン"
             description="カメラで本のバーコードをスキャンして本の検索を行います"
-            imagePath="/src/assets/barcode-code-scan-svgrepo-com.svg"
+            imagePath="https://tech-libra-images.s3.ap-northeast-1.amazonaws.com/barcode-code-scan-svgrepo-com.svg"
             imageAlt="バーコード検索"
             targetPath="/donation/scan-barcode"
           />
