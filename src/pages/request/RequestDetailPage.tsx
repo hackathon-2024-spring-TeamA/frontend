@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 import { useMutation, useQuery } from "@apollo/client";
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { Box, Typography, Grid, Button, Container, Paper } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
@@ -254,4 +258,5 @@ const RequestDetailPage: React.FC = () => {
   );
 };
 
-export default RequestDetailPage;
+const AuthenticatedRequestDetailPage = withAuthenticator(RequestDetailPage);
+export default AuthenticatedRequestDetailPage;

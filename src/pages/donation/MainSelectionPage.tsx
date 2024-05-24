@@ -1,5 +1,9 @@
 import React from "react";
 
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { Grid, Box } from "@mui/material";
 
 import ActionAreaCard from "@/components/Card/SelectionCard";
@@ -54,4 +58,5 @@ const MainSelectionPage: React.FC = () => {
   );
 };
 
-export default MainSelectionPage;
+const AuthenticatedMainsSElectionPage = withAuthenticator(MainSelectionPage);
+export default AuthenticatedMainsSElectionPage;
