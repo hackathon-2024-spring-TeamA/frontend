@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import awsExports from "./aws-exports";
+import AboutPage from "./pages/about/AboutPage";
 import BarcodeScannerPage from "./pages/donation/BarcodeScannerPage";
 import BookTitleInputPage from "./pages/donation/BookTitleInputPage";
 import DonationConfirmationPage from "./pages/donation/DonationConfirmationPage";
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
         <Route index element={<MockHomePage />} />
         <Route path="home" element={<SearchBooksPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="about" element={<AboutPage />} />
         <Route path="confirm-loan" element={<LoanConfirmationPage />} />
         <Route path="donation">
           {/* 寄付機能 PATH */}
