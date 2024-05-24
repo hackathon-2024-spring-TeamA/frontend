@@ -47,7 +47,6 @@ export const BookCard: React.FC<{
         <CardActionArea
           component={Link}
           to={`/requests/detail?requestId=${bookRequest.id}`}
-          state={{ bookRequest: bookRequest }}
           sx={{
             borderRadius: "10px",
             overflow: "hidden",
