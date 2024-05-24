@@ -15,9 +15,13 @@ const theme = createTheme({
           backgroundRepeat: "no-repeat",
           height: "100%",
           width: "100%",
-          position: "relative", // fixed?
+          position: "relative",
           top: 0,
           left: 0,
+          "@media (max-width:600px)": {
+            backgroundImage:
+              'url("/src/assets/images/background_image_mobile.png")',
+          },
         },
       },
     },
