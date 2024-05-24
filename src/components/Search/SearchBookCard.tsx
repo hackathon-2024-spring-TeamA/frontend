@@ -16,15 +16,20 @@ import { Link } from "react-router-dom";
 
 import { Book } from "@/types/interface";
 
-export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
+interface SearchBookCardProps {
+  book: Book;
+  userId: string;
+}
+
+export const SearchBookCard: React.FC<SearchBookCardProps> = ({
+  book,
+  userId,
+}) => {
+  // userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  // TODO User
-  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
-  console.log(userId);
 
   const truncateTitle = (title: string, maxLines: number) => {
     const words = title.split(" ");
@@ -75,6 +80,52 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
   };
 
   const getBookStatus = (book: Book) => {
+    // リクエスト中、所持中追加ロジック追加
+    const latestBookRequest = book.latest_book_request;
+    const latestBookLoan = book.latest_book_loan;
+
+    if (
+      latestBookRequest &&
+      (latestBookRequest.status === "requested" ||
+        latestBookRequest.status === "sending")
+    ) {
+      if (latestBookRequest.requester_id === userId) {
+        return {
+          label: "リクエスト中",
+          color: "rgba(128, 128, 128, 0.3)",
+          deadline: "期限:未定",
+        };
+      }
+    }
+
+    if (
+      latestBookLoan &&
+      latestBookLoan.is_held &&
+      latestBookLoan.user_id === userId
+    ) {
+      const dueDate = new Date(latestBookLoan.due_date);
+      const deadline = new Date(dueDate);
+      deadline.setDate(deadline.getDate() + 1);
+      deadline.setHours(12, 30, 0, 0);
+
+      const today = new Date();
+
+      if (today < deadline) {
+        return {
+          label: "所持中",
+          color: "rgba(144, 238, 144, 0.3)",
+          deadline: `期限:${deadline.toLocaleDateString()} 12:30`,
+        };
+      } else {
+        return {
+          label: "所持中",
+          color: "rgba(144, 238, 144, 0.3)",
+          deadline: "\u00A0",
+        };
+      }
+    }
+    // ここまで
+
     if (!book.latest_book_loan) {
       if (book.latest_book_request) {
         return {
@@ -147,7 +198,9 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
             transform: "scale(1.05)",
             boxShadow: "0 12px 24px rgba(0, 0, 0, 0.3)",
           },
-          ...(getBookStatus(book).label !== "貸出可能" && {
+          ...(["貸出処理中", "リクエスト中"].includes(
+            getBookStatus(book).label,
+          ) && {
             filter: "brightness(80%)",
           }),
         }}
@@ -228,7 +281,8 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               color:
                 getBookStatus(book).label === "貸出処理中"
                   ? "black"
-                  : getBookStatus(book).label === "貸出可能"
+                  : getBookStatus(book).label === "貸出可能" ||
+                      getBookStatus(book).label === "所持中"
                     ? "green"
                     : "red",
               textAlign: "center",
@@ -371,7 +425,8 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                   color:
                     getBookStatus(book).label === "貸出処理中"
                       ? "black"
-                      : getBookStatus(book).label === "貸出可能"
+                      : getBookStatus(book).label === "貸出可能" ||
+                          getBookStatus(book).label === "所持中"
                         ? "green"
                         : "red",
                   textAlign: "center",

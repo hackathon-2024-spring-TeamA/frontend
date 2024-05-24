@@ -67,7 +67,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
             ) : (
               data?.searchBooks.books.map((book, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                  <SearchBookCard book={book} />
+                  <SearchBookCard book={book} userId={user?.userId || ""} />
                 </Grid>
               ))
             )}
