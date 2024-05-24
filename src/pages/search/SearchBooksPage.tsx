@@ -6,7 +6,7 @@ import {
   WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
 import { Box, Grid, CircularProgress } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { PaginationComponent } from "../../components/Common/Pagination";
 import { SearchInput } from "../../components/Common/SearchInput";
@@ -20,16 +20,20 @@ import { SearchPaginationData } from "@/types/interface";
 import "@aws-amplify/ui-react/styles.css";
 
 const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.donationSuccess) {
       setSnackbarOpen(true);
+      // Clear the state after showing the snackbar
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location.state, navigate, location.pathname]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -50,6 +54,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
       perPage: 8,
       searchQuery: searchQuery,
     },
+    fetchPolicy: "network-only",
   });
 
   if (error) return <p>Error: {error.message}</p>;
