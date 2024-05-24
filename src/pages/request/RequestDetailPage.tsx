@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   withAuthenticator,
   // WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
-import { Box, Typography, Grid, Button, Container, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Container,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { ConfirmationModal } from "@/components/Common/ConfirmationModal";
@@ -14,7 +22,9 @@ import { GET_BOOK_REQUEST } from "@/features/request/queries";
 
 const RequestDetailPage: React.FC = () => {
   const location = useLocation();
-  const bookRequest = location.state?.bookRequest;
+  const searchParams = new URLSearchParams(location.search);
+  const requestId = searchParams.get("requestId");
+
   const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef"; // ログインユーザーのIDに置き換える
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -22,35 +32,93 @@ const RequestDetailPage: React.FC = () => {
   const [nextStatus, setNextStatus] = useState("");
 
   const [updateBookRequestStatus] = useMutation(UPDATE_BOOK_REQUEST_STATUS);
-  const { data, refetch } = useQuery(GET_BOOK_REQUEST, {
-    variables: { requestId: bookRequest?.id },
-    skip: !bookRequest?.id,
-  });
+  const [getBookRequest, { data, loading, error }] =
+    useLazyQuery(GET_BOOK_REQUEST);
+
+  useEffect(() => {
+    if (requestId) {
+      getBookRequest({ variables: { requestId } });
+    }
+  }, [requestId, getBookRequest]);
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const currentBookRequest = data?.getBookRequest;
+
+  if (!currentBookRequest) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h5" color="information">
+          データが見つかりませんでした。
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (
+    currentBookRequest.requester_id !== userId &&
+    currentBookRequest.holder_id !== userId
+  ) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h5" color="error">
+          権限がありません。
+        </Typography>
+      </Box>
+    );
+  }
+
+  const isHolder = userId === currentBookRequest.holder_id;
 
   const handleConfirmAction = async (status: string) => {
     if (status === "arrived") {
       await updateBookRequestStatus({
         variables: {
-          requestId: bookRequest.id,
+          requestId: currentBookRequest.id,
           status,
           userId: userId,
-          bookId: parseInt(bookRequest.book.id),
+          bookId: parseInt(currentBookRequest.book.id),
         },
       });
     } else if (status === "sending") {
       await updateBookRequestStatus({
         variables: {
-          requestId: bookRequest.id,
+          requestId: currentBookRequest.id,
           status,
-          bookId: parseInt(bookRequest.book.id),
+          bookId: parseInt(currentBookRequest.book.id),
         },
       });
     } else {
       await updateBookRequestStatus({
-        variables: { requestId: bookRequest.id, status },
+        variables: { requestId: currentBookRequest.id, status },
       });
     }
-    await refetch({ requestId: bookRequest.id });
+    await getBookRequest({ variables: { requestId } });
     setModalOpen(false);
   };
 
@@ -59,13 +127,6 @@ const RequestDetailPage: React.FC = () => {
     setNextStatus(status);
     setModalOpen(true);
   };
-
-  if (!bookRequest && !data?.getBookRequest) {
-    return <div>データが見つかりませんでした。</div>;
-  }
-
-  const currentBookRequest = data?.getBookRequest || bookRequest;
-  const isHolder = userId === currentBookRequest.holder_id;
 
   const statusText = (status: string, isHolder: boolean) => {
     const texts = {
