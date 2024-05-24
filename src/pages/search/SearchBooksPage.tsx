@@ -6,7 +6,7 @@ import {
   WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
 import { Box, Grid, CircularProgress } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { PaginationComponent } from "../../components/Common/Pagination";
 import { SearchInput } from "../../components/Common/SearchInput";
@@ -24,12 +24,15 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location.state?.donationSuccess) {
       setSnackbarOpen(true);
+      // Clear the state after showing the snackbar
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location.state, navigate, location.pathname]);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
