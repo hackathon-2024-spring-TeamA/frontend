@@ -124,7 +124,7 @@ const NotLoginHeader: React.FC = () => {
                 </Button>
                 <Button
                   color="inherit"
-                  sx={{ ml: 1.5 }}
+                  sx={{ ml: 3.0 }}
                   component={Link}
                   to="/login"
                 >
