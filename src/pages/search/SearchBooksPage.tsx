@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useQuery } from "@apollo/client";
 import {
@@ -6,11 +6,13 @@ import {
   WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
 import { Box, Grid, CircularProgress } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 import { PaginationComponent } from "../../components/Common/Pagination";
 import { SearchInput } from "../../components/Common/SearchInput";
 import { SearchBookCard } from "../../components/Search/SearchBookCard";
 
+import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { SEARCH_BOOKS } from "@/features/search/queries";
 import { GET_USER_NICKNAME } from "@/features/user/queries";
 import { SearchPaginationData } from "@/types/interface";
@@ -20,6 +22,18 @@ import "@aws-amplify/ui-react/styles.css";
 const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.donationSuccess) {
+      setSnackbarOpen(true);
+    }
+  }, [location.state]);
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   console.log(user?.userId);
   const { data: userNicknameData } = useQuery(GET_USER_NICKNAME, {
@@ -86,6 +100,12 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
           onPageChange={handlePageChange}
         />
       </Box>
+      <AlertSnackbar
+        open={snackbarOpen}
+        message="We are grateful for your donation!!!!🎊"
+        severity="success"
+        onClose={handleSnackbarClose}
+      />
     </Box>
   );
 };

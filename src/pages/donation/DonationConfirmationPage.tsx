@@ -63,7 +63,7 @@ const DonationConfirmationPage: React.FC<WithAuthenticatorProps> = ({
           image_path: book.imagePath,
         },
       });
-      navigate("/home");
+      navigate("/home", { state: { donationSuccess: true } });
     } else {
       alert("Please confirm the donation by checking the box.");
     }
