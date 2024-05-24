@@ -64,7 +64,6 @@ const BookTitleInputPage: React.FC = () => {
     authors: string[];
   }) => {
     setModalOpen(false);
-    console.log("Selected Book:", book);
     navigate("/donation/confirm-donation", { state: { book } });
   };
 
@@ -73,7 +72,6 @@ const BookTitleInputPage: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("Form Data:", data);
     try {
       const booksData = await fetchBooksByTitle(data.book);
       handleOpenModal(booksData);

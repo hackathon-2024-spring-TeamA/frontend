@@ -75,7 +75,6 @@ const ISBNInputPage: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("Form Data:", data);
     try {
       const bookData = await fetchBooksByIsbn(data.isbn);
       handleOpenModal(bookData);

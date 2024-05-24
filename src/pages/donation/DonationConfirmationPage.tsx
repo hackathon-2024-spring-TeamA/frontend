@@ -50,7 +50,6 @@ const DonationConfirmationPage: React.FC<WithAuthenticatorProps> = ({
   const handleDonate = () => {
     if (isConfirmed) {
       // ここでDBにデータを保存する処理を呼び出します
-      console.log("Saving the book to DB:", book);
       // データベース保存後、寄付完了ページやメインページに遷移するなど
       saveBook({
         variables: {
