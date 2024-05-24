@@ -49,6 +49,10 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
     setCurrentPage(1);
   };
 
+  if (!user) {
+    return <div>Hello</div>;
+  }
+
   return (
     <Box py={4}>
       <Box maxWidth="xl" mx="auto" px={4}>
