@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
 import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
+import {
   Box,
   Button,
   CardMedia,
@@ -193,4 +197,7 @@ const DonationConfirmationPage: React.FC = () => {
   );
 };
 
-export default DonationConfirmationPage;
+const AuthenticatedDonationConfirmationPage = withAuthenticator(
+  DonationConfirmationPage,
+);
+export default AuthenticatedDonationConfirmationPage;
