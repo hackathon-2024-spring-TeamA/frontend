@@ -46,7 +46,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const nickname = userNicknameData?.getUserNickname;
   console.log(nickname);
 
-  const { data, loading, error } = useQuery<{
+  const { data, loading, error, refetch } = useQuery<{
     searchBooks: SearchPaginationData;
   }>(SEARCH_BOOKS, {
     variables: {
@@ -56,6 +56,10 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
     },
     fetchPolicy: "network-only",
   });
+
+  useEffect(() => {
+    refetch();
+  }, [location.pathname, refetch]);
 
   if (error) return <p>Error: {error.message}</p>;
 
