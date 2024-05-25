@@ -1,56 +1,143 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import {
   withAuthenticator,
-  // WithAuthenticatorProps,
+  WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
-import { Box, Typography, Grid, Button, Container, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Container,
+  Paper,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 import { ConfirmationModal } from "@/components/Common/ConfirmationModal";
 import { UPDATE_BOOK_REQUEST_STATUS } from "@/features/request/mutations";
 import { GET_BOOK_REQUEST } from "@/features/request/queries";
+import { GET_USER_NICKNAME } from "@/features/user/queries";
 
-const RequestDetailPage: React.FC = () => {
+const RequestDetailPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const location = useLocation();
-  const bookRequest = location.state?.bookRequest;
-  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef"; // ログインユーザーのIDに置き換える
+  const searchParams = new URLSearchParams(location.search);
+  const requestId = searchParams.get("requestId");
+
+  const userId = user?.userId;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [nextStatus, setNextStatus] = useState("");
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [updateBookRequestStatus] = useMutation(UPDATE_BOOK_REQUEST_STATUS);
-  const { data, refetch } = useQuery(GET_BOOK_REQUEST, {
-    variables: { requestId: bookRequest?.id },
-    skip: !bookRequest?.id,
+  const [getBookRequest, { data, loading, error }] =
+    useLazyQuery(GET_BOOK_REQUEST);
+
+  useEffect(() => {
+    if (requestId) {
+      getBookRequest({ variables: { requestId } });
+    }
+  }, [requestId, getBookRequest]);
+
+  const currentBookRequest = data?.getBookRequest;
+  const holder_id = currentBookRequest?.holder_id;
+  const requester_id = currentBookRequest?.requester_id;
+  const { data: holderNicknameData } = useQuery(GET_USER_NICKNAME, {
+    variables: { userId: holder_id },
+    skip: !holder_id,
   });
+  const { data: requesterNicknameData } = useQuery(GET_USER_NICKNAME, {
+    variables: { userId: requester_id },
+    skip: !requester_id,
+  });
+  const holder_nickname = holderNicknameData?.getUserNickname;
+  const requester_nickname = requesterNicknameData?.getUserNickname;
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!currentBookRequest) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h5" color="information">
+          データが見つかりませんでした。
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (
+    currentBookRequest.requester_id !== userId &&
+    currentBookRequest.holder_id !== userId
+  ) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h5" color="error">
+          権限がありません。
+        </Typography>
+      </Box>
+    );
+  }
+
+  const isHolder = userId === currentBookRequest.holder_id;
 
   const handleConfirmAction = async (status: string) => {
     if (status === "arrived") {
       await updateBookRequestStatus({
         variables: {
-          requestId: bookRequest.id,
+          requestId: currentBookRequest.id,
           status,
           userId: userId,
-          bookId: parseInt(bookRequest.book.id),
+          bookId: parseInt(currentBookRequest.book.id),
         },
       });
     } else if (status === "sending") {
       await updateBookRequestStatus({
         variables: {
-          requestId: bookRequest.id,
+          requestId: currentBookRequest.id,
           status,
-          bookId: parseInt(bookRequest.book.id),
+          bookId: parseInt(currentBookRequest.book.id),
         },
       });
     } else {
       await updateBookRequestStatus({
-        variables: { requestId: bookRequest.id, status },
+        variables: { requestId: currentBookRequest.id, status },
       });
     }
-    await refetch({ requestId: bookRequest.id });
+    await getBookRequest({ variables: { requestId } });
     setModalOpen(false);
   };
 
@@ -59,13 +146,6 @@ const RequestDetailPage: React.FC = () => {
     setNextStatus(status);
     setModalOpen(true);
   };
-
-  if (!bookRequest && !data?.getBookRequest) {
-    return <div>データが見つかりませんでした。</div>;
-  }
-
-  const currentBookRequest = data?.getBookRequest || bookRequest;
-  const isHolder = userId === currentBookRequest.holder_id;
 
   const statusText = (status: string, isHolder: boolean) => {
     const texts = {
@@ -79,20 +159,36 @@ const RequestDetailPage: React.FC = () => {
   const getStatusStyles = (status: string, isHolder: boolean) => {
     const statusColor = isHolder
       ? {
-          requested: "error.main", // 赤
-          sending: "grey.500", // グレー
-          arrived: "primary.main", // 青
+          requested: "error.main",
+          sending: "grey.500",
+          arrived: "primary.main",
         }
       : {
-          requested: "primary.main", // 青
-          sending: "grey.500", // グレー
-          arrived: "black", // 黒
+          requested: "primary.main",
+          sending: "grey.500",
+          arrived: "black",
         };
 
     return {
       backgroundColor: statusColor[status as keyof typeof statusColor],
       color: "white",
     };
+  };
+
+  const handleServiceGuideClick = () => {
+    setConfirmationModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    setConfirmationModalOpen(false);
+    window.open(
+      "https://www.notosiki.co.jp/blog/other/yamato-anonymous-delivery/",
+      "_blank",
+    );
+  };
+
+  const handleCancel = () => {
+    setConfirmationModalOpen(false);
   };
 
   return (
@@ -158,19 +254,26 @@ const RequestDetailPage: React.FC = () => {
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
                     相手に本が到着しました。本を通じて新しい出会いや発見があったことを願っています。
-                    読書の感想を共有し合うのも素敵ですね。
+                    <br></br>
+                    <a href="mattermost://chat.raretech.site/raretech/channels/2book">
+                      読書コミュニティ
+                    </a>
+                    で、本の感想を共有し合うのも素敵ですね。
                   </Typography>
                 ) : currentBookRequest.status === "sending" ? (
                   <Typography
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
-                    発送が完了しています。相手の到着連絡をお待ちください。
+                    発送が完了しました。<br></br>相手への到着をお待ちください！
                   </Typography>
                 ) : (
                   <Typography
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
-                    リクエストが届きました。本を発送してください。
+                    {requester_nickname}さんからリクエストが届きました。
+                    <br></br>
+                    <a href="mattermost://chat.raretech.site/">Mattermost</a>
+                    のDMで連絡を取り合い、本を発送してください！
                   </Typography>
                 )}
                 <Box
@@ -180,7 +283,11 @@ const RequestDetailPage: React.FC = () => {
                     gap: 2,
                   }}
                 >
-                  <Button size="large" variant="contained">
+                  <Button
+                    size="large"
+                    variant="contained"
+                    onClick={handleServiceGuideClick}
+                  >
                     配送サービスの使い方
                   </Button>
                   <Button
@@ -204,19 +311,30 @@ const RequestDetailPage: React.FC = () => {
                   <Typography
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
-                    本が到着しました。素敵な読書体験をお楽しみください。読み終わったら、感想を所有者の方と共有してみてくださいね。
+                    本が到着しました。素敵な読書体験をお楽しみください。
+                    <br></br>読み終わったら、
+                    <a href="mattermost://chat.raretech.site/raretech/channels/2book">
+                      読書コミュニティ
+                    </a>
+                    で感想を他のRareTECH生の方と共有してみてくださいね。
                   </Typography>
                 ) : currentBookRequest.status === "sending" ? (
                   <Typography
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
-                    所有者の方が発送しました。到着までもうしばらくお待ちください。到着したら「到着済み」ボタンを押してくださいね。
+                    {holder_nickname}
+                    さんが発送しました。到着までもうしばらくお待ちください。
+                    <br></br>到着したら「到着済み」ボタンを押してくださいね。
                   </Typography>
                 ) : (
                   <Typography
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
-                    現在の所有者にリクエストを送りました。相手からの発送をお待ちください。本が届いたら「到着済み」を押してください。
+                    現在の所有者である{holder_nickname}
+                    さんにリクエストを送りました。<br></br>
+                    <a href="mattermost://chat.raretech.site/">Mattermost</a>
+                    で相手の方とチャットで連絡し、配送してもらいましょう！{" "}
+                    <br></br>本が届いたら「到着済み」を押してください。
                   </Typography>
                 )}
                 <Box
@@ -226,7 +344,11 @@ const RequestDetailPage: React.FC = () => {
                     gap: 2,
                   }}
                 >
-                  <Button size="large" variant="contained">
+                  <Button
+                    size="large"
+                    variant="contained"
+                    onClick={handleServiceGuideClick}
+                  >
                     配送サービスの使い方
                   </Button>
                   <Button
@@ -254,6 +376,29 @@ const RequestDetailPage: React.FC = () => {
         onCancel={() => setModalOpen(false)}
         message={modalMessage}
       />
+      <Dialog
+        open={confirmationModalOpen}
+        onClose={handleCancel}
+        aria-labelledby="confirmation-dialog-title"
+        aria-describedby="confirmation-dialog-description"
+      >
+        <DialogTitle id="confirmation-dialog-title">
+          配送サービスの使い方
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirmation-dialog-description">
+            外部ページに移動します。よろしいですか？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            いいえ
+          </Button>
+          <Button onClick={handleConfirm} color="primary" autoFocus>
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

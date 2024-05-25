@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import {
   withAuthenticator,
-  // WithAuthenticatorProps,
+  WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
 import InfoIcon from "@mui/icons-material/Info";
 import {
@@ -23,10 +23,10 @@ import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { PAGINATED_BOOK_REQUESTS } from "@/features/request/queries";
 import { PaginationData } from "@/types/interface";
 
-const RequestBooksPage: React.FC = () => {
+const RequestBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isMyRequest, setIsMyRequest] = useState(true);
-  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
+  const userId = user?.userId || "";
   const location = useLocation();
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);

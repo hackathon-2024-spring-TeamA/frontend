@@ -123,6 +123,15 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
       }
     }
 
+    // 5/25追加 寄付者も最初は借りられないように
+    if (!latestBookLoan && book.user_id === userId) {
+      return {
+        label: "所持中",
+        color: "rgba(144, 238, 144, 0.3)",
+        deadline: "\u00A0",
+      };
+    }
+
     if (!book.latest_book_loan) {
       if (book.latest_book_request) {
         return {

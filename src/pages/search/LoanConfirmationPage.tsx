@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import {
   withAuthenticator,
-  // WithAuthenticatorProps,
+  WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
 import {
   Container,
@@ -29,7 +29,7 @@ interface BookData {
   holderId: string;
 }
 
-const LoanConfirmationPage: React.FC = () => {
+const LoanConfirmationPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,8 +42,7 @@ const LoanConfirmationPage: React.FC = () => {
 
   const [createBookRequest, { loading }] = useMutation(CREATE_BOOK_REQUEST);
 
-  // サンプルのユーザーID
-  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
+  const userId = user?.userId;
 
   if (!book) {
     return (

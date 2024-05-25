@@ -1,28 +1,30 @@
+// SearchBooksPage.tsx
 import React, { useEffect, useState } from "react";
 
 import { useQuery } from "@apollo/client";
-import {
-  withAuthenticator,
-  WithAuthenticatorProps,
-} from "@aws-amplify/ui-react";
 import { Box, Grid, CircularProgress } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { PaginationComponent } from "../../components/Common/Pagination";
 import { SearchInput } from "../../components/Common/SearchInput";
-import { SearchBookCard } from "../../components/Search/SearchBookCard";
+import { NoLoginSearchBookCard } from "../../components/Search/NoLoginSearchBookCard";
 
 import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { SEARCH_BOOKS } from "@/features/search/queries";
-import { GET_USER_NICKNAME } from "@/features/user/queries";
 import { SearchPaginationData } from "@/types/interface";
+
 import "@aws-amplify/ui-react/styles.css";
 
-const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
+const SearchBooksPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check for LocalStorage data
+    if (localStorage.length > 0) {
+      navigate("/home");
+    }
+
     if (location.state?.donationSuccess) {
       setSnackbarOpen(true);
       // Clear the state after showing the snackbar
@@ -38,16 +40,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
     setSnackbarOpen(false);
   };
 
-  console.log(user?.userId);
-
-  const { data: userNicknameData } = useQuery(GET_USER_NICKNAME, {
-    variables: { userId: user?.userId },
-  });
-
-  const nickname = userNicknameData?.getUserNickname;
-  console.log(nickname);
-
-  const { data, loading, error, refetch } = useQuery<{
+  const { data, loading, error } = useQuery<{
     searchBooks: SearchPaginationData;
   }>(SEARCH_BOOKS, {
     variables: {
@@ -57,10 +50,6 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
     },
     fetchPolicy: "network-only",
   });
-
-  useEffect(() => {
-    refetch();
-  }, [location.pathname, refetch]);
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -72,10 +61,6 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
-
-  if (!user) {
-    return <div>Hello</div>;
-  }
 
   return (
     <Box py={4}>
@@ -95,7 +80,7 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
             ) : (
               data?.searchBooks.books.map((book, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                  <SearchBookCard book={book} userId={user?.userId || ""} />
+                  <NoLoginSearchBookCard book={book} />
                 </Grid>
               ))
             )}
@@ -120,6 +105,4 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   );
 };
 
-const SearchBooksPageWithAuthenticator = withAuthenticator(SearchBooksPage);
-
-export default SearchBooksPageWithAuthenticator;
+export default SearchBooksPage;
