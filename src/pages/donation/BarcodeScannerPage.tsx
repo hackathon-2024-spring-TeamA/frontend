@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -9,8 +13,6 @@ import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { fetchBooksByIsbn } from "@/features/donation/googleBooksApi";
 
 const BarcodeScannerPage: React.FC = () => {
-  // todo: isbnの状態を消す
-  const [isbn, setIsbn] = useState("");
   const [book, setBook] = useState<{
     imagePath: string;
     title: string;
@@ -25,9 +27,6 @@ const BarcodeScannerPage: React.FC = () => {
   const handleBack = () => navigate(-1);
 
   const handleScanSuccess = async (scannedIsbn: string) => {
-    setIsbn(scannedIsbn);
-    console.log(isbn);
-
     try {
       const bookData = await fetchBooksByIsbn(scannedIsbn);
       setBook(bookData);
@@ -121,4 +120,5 @@ const BarcodeScannerPage: React.FC = () => {
   );
 };
 
-export default BarcodeScannerPage;
+const AuthenticatedBarcodeScannerPage = withAuthenticator(BarcodeScannerPage);
+export default AuthenticatedBarcodeScannerPage;

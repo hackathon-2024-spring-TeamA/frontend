@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@apollo/client";
+import {
+  withAuthenticator,
+  WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import {
   Box,
   Button,
@@ -12,18 +17,29 @@ import {
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import { SAVE_BOOK_MUTATION } from "@/features/donation/mutation";
+
 // 本の情報の型を定義
 interface Book {
+  isbn: string;
   imagePath: string;
   title: string;
+  publishd_date: string;
+  publishedDate: string;
+  description: string;
   authors: string[];
 }
 
-const DonationConfirmationPage: React.FC = () => {
+const DonationConfirmationPage: React.FC<WithAuthenticatorProps> = ({
+  user,
+}) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const user_id = user?.userId;
   const { book } = location.state as { book: Book };
+
+  const [saveBook] = useMutation(SAVE_BOOK_MUTATION);
 
   const handleConfirmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsConfirmed(event.target.checked);
@@ -34,10 +50,19 @@ const DonationConfirmationPage: React.FC = () => {
   const handleDonate = () => {
     if (isConfirmed) {
       // ここでDBにデータを保存する処理を呼び出します
-      console.log("Saving the book to DB:", book);
       // データベース保存後、寄付完了ページやメインページに遷移するなど
-      // todo: 仮でホームページへ遷移する スナックバーとかも表示したい。
-      navigate("/");
+      saveBook({
+        variables: {
+          user_id: user_id,
+          isbn_number: book.isbn,
+          title: book.title,
+          author: book.authors.join(", "),
+          published_date: book.publishedDate,
+          description: book.description,
+          image_path: book.imagePath,
+        },
+      });
+      navigate("/home", { state: { donationSuccess: true } });
     } else {
       alert("Please confirm the donation by checking the box.");
     }
@@ -193,4 +218,7 @@ const DonationConfirmationPage: React.FC = () => {
   );
 };
 
-export default DonationConfirmationPage;
+const AuthenticatedDonationConfirmationPage = withAuthenticator(
+  DonationConfirmationPage,
+);
+export default AuthenticatedDonationConfirmationPage;

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -60,7 +64,6 @@ const BookTitleInputPage: React.FC = () => {
     authors: string[];
   }) => {
     setModalOpen(false);
-    console.log("Selected Book:", book);
     navigate("/donation/confirm-donation", { state: { book } });
   };
 
@@ -69,7 +72,6 @@ const BookTitleInputPage: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("Form Data:", data);
     try {
       const booksData = await fetchBooksByTitle(data.book);
       handleOpenModal(booksData);
@@ -168,4 +170,5 @@ const BookTitleInputPage: React.FC = () => {
   );
 };
 
-export default BookTitleInputPage;
+const AuthenticatedBookTitleInputPage = withAuthenticator(BookTitleInputPage);
+export default AuthenticatedBookTitleInputPage;

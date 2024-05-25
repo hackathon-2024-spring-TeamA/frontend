@@ -16,7 +16,15 @@ import { Link } from "react-router-dom";
 
 import { Book } from "@/types/interface";
 
-export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
+interface SearchBookCardProps {
+  book: Book;
+  userId: string;
+}
+
+export const SearchBookCard: React.FC<SearchBookCardProps> = ({
+  book,
+  userId,
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -71,6 +79,59 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
   };
 
   const getBookStatus = (book: Book) => {
+    const latestBookRequest = book.latest_book_request;
+    const latestBookLoan = book.latest_book_loan;
+
+    if (
+      latestBookRequest &&
+      (latestBookRequest.status === "requested" ||
+        latestBookRequest.status === "sending")
+    ) {
+      if (latestBookRequest.requester_id === userId) {
+        return {
+          label: "リクエスト中",
+          color: "rgba(128, 128, 128, 0.3)",
+          deadline: "期限:未定",
+        };
+      }
+    }
+
+    if (
+      latestBookLoan &&
+      latestBookLoan.is_held &&
+      latestBookLoan.user_id === userId
+    ) {
+      const dueDate = new Date(latestBookLoan.due_date);
+      const deadline = new Date(dueDate);
+      deadline.setDate(deadline.getDate() + 1);
+      deadline.setHours(12, 30, 0, 0);
+
+      const today = new Date();
+
+      if (today < deadline) {
+        return {
+          label: "所持中",
+          color: "rgba(144, 238, 144, 0.3)",
+          deadline: `期限:${deadline.toLocaleDateString()} 12:30`,
+        };
+      } else {
+        return {
+          label: "所持中",
+          color: "rgba(144, 238, 144, 0.3)",
+          deadline: "\u00A0",
+        };
+      }
+    }
+
+    // 5/25追加 寄付者も最初は借りられないように
+    if (!latestBookLoan && book.user_id === userId) {
+      return {
+        label: "所持中",
+        color: "rgba(144, 238, 144, 0.3)",
+        deadline: "\u00A0",
+      };
+    }
+
     if (!book.latest_book_loan) {
       if (book.latest_book_request) {
         return {
@@ -143,7 +204,9 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
             transform: "scale(1.05)",
             boxShadow: "0 12px 24px rgba(0, 0, 0, 0.3)",
           },
-          ...(getBookStatus(book).label !== "貸出可能" && {
+          ...(["貸出処理中", "リクエスト中"].includes(
+            getBookStatus(book).label,
+          ) && {
             filter: "brightness(80%)",
           }),
         }}
@@ -224,7 +287,8 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               color:
                 getBookStatus(book).label === "貸出処理中"
                   ? "black"
-                  : getBookStatus(book).label === "貸出可能"
+                  : getBookStatus(book).label === "貸出可能" ||
+                      getBookStatus(book).label === "所持中"
                     ? "green"
                     : "red",
               textAlign: "center",
@@ -291,30 +355,29 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: "85%",
-              maxWidth: "850px",
+              maxWidth: "700px",
               height: "85%",
-              maxHeight: "92vh",
+              maxHeight: "85vh",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              flexDirection: "column",
+              overflow: "hidden",
             }}
           >
             <Paper
               sx={{
-                p: 4,
+                p: 3,
                 borderRadius: "10px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 width: "100%",
                 height: "100%",
-                overflow: "hidden",
               }}
             >
               <Box
                 sx={{
                   width: "100%",
-                  height: "60%",
+                  flex: "0 0 auto",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -326,7 +389,7 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                   sx={{
                     objectFit: "contain",
                     width: "100%",
-                    height: "100%",
+                    maxHeight: "200px", // 画像の最大高さを制限
                   }}
                   image={book.book_information.image_path}
                   alt={book.book_information.title}
@@ -343,7 +406,7 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               <Box
                 sx={{
                   width: "100%",
-                  height: "15%",
+                  flex: "1 1 auto",
                   overflowY: "auto",
                   mb: 2,
                   borderRadius: "4px",
@@ -367,7 +430,8 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
                   color:
                     getBookStatus(book).label === "貸出処理中"
                       ? "black"
-                      : getBookStatus(book).label === "貸出可能"
+                      : getBookStatus(book).label === "貸出可能" ||
+                          getBookStatus(book).label === "所持中"
                         ? "green"
                         : "red",
                   textAlign: "center",
@@ -383,11 +447,11 @@ export const SearchBookCard: React.FC<{ book: Book }> = ({ book }) => {
               </Typography>
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "stretch",
                   width: "100%",
-                  mt: "auto",
+                  position: "sticky",
+                  bottom: 0,
+                  backgroundColor: "white",
+                  pt: 2,
                 }}
               >
                 {getBookStatus(book).label === "貸出可能" && (

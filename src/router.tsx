@@ -6,22 +6,27 @@ import {
 } from "react-router-dom";
 
 import awsExports from "./aws-exports";
+import AboutPage from "./pages/about/AboutPage";
 import BarcodeScannerPage from "./pages/donation/BarcodeScannerPage";
 import BookTitleInputPage from "./pages/donation/BookTitleInputPage";
 import DonationConfirmationPage from "./pages/donation/DonationConfirmationPage";
 import ISBNInputPage from "./pages/donation/ISBNInputPage";
 import MainSelectionPage from "./pages/donation/MainSelectionPage";
+import LoginPage from "./pages/login/OriginalAuthenticatorPage";
 import MockCardsPage from "./pages/mock/MockCardsPage";
 import RequestBooksPage from "./pages/request/RequestBooksPage";
 import RequestDetailPage from "./pages/request/RequestDetailPage";
 import LoanConfirmationPage from "./pages/search/LoanConfirmationPage";
+import NoLoginSearchBooksPage from "./pages/search/NoLoginSearchBooksPage";
 import SearchBooksPage from "./pages/search/SearchBooksPage";
+import UserPage from "./pages/user/UserPage";
 
 import MainLayout from "@/components/Layout/MainLayout";
 import MockAboutPage from "@/pages/mock/MockAboutPage";
 import MockGqlPage from "@/pages/mock/MockGqlPage";
 import MockHomePage from "@/pages/mock/MockHomePage";
 
+import "@aws-amplify/ui-react/styles.css";
 Amplify.configure(awsExports);
 
 const router = createBrowserRouter(
@@ -29,7 +34,11 @@ const router = createBrowserRouter(
     <Route element={<MainLayout />}>
       <Route path="/">
         {/* 作成した本番用Pageコンポーネントを配置 */}
-        <Route index element={<SearchBooksPage />} />
+        <Route index element={<NoLoginSearchBooksPage />} />
+        <Route path="home" element={<SearchBooksPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="setting" element={<UserPage />} />
         <Route path="confirm-loan" element={<LoanConfirmationPage />} />
         <Route path="donation">
           {/* 寄付機能 PATH */}

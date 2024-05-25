@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import {
+  withAuthenticator,
+  // WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -71,7 +75,6 @@ const ISBNInputPage: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("Form Data:", data);
     try {
       const bookData = await fetchBooksByIsbn(data.isbn);
       handleOpenModal(bookData);
@@ -169,4 +172,5 @@ const ISBNInputPage: React.FC = () => {
   );
 };
 
-export default ISBNInputPage;
+const AuthenticatedISBNInputPage = withAuthenticator(ISBNInputPage);
+export default AuthenticatedISBNInputPage;
