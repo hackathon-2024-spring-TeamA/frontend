@@ -264,7 +264,7 @@ const RequestDetailPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
                   <Typography
                     sx={{ textAlign: { xs: "center", md: "left" }, mb: 4 }}
                   >
-                    発送が完了しました。<br></br>到着をお待ちください!
+                    発送が完了しました。<br></br>相手への到着をお待ちください！
                   </Typography>
                 ) : (
                   <Typography
