@@ -350,8 +350,8 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
               height: "85%",
               maxHeight: "85vh",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              flexDirection: "column",
+              overflow: "hidden",
             }}
           >
             <Paper
@@ -363,13 +363,12 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
                 alignItems: "center",
                 width: "100%",
                 height: "100%",
-                overflow: "hidden",
               }}
             >
               <Box
                 sx={{
                   width: "100%",
-                  height: "50%",
+                  flex: "0 0 auto",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -381,7 +380,7 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
                   sx={{
                     objectFit: "contain",
                     width: "100%",
-                    height: "100%",
+                    maxHeight: "200px", // 画像の最大高さを制限
                   }}
                   image={book.book_information.image_path}
                   alt={book.book_information.title}
@@ -398,7 +397,7 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
               <Box
                 sx={{
                   width: "100%",
-                  height: "25%",
+                  flex: "1 1 auto",
                   overflowY: "auto",
                   mb: 2,
                   borderRadius: "4px",
@@ -439,11 +438,11 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
               </Typography>
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "stretch",
                   width: "100%",
-                  mt: "auto",
+                  position: "sticky",
+                  bottom: 0,
+                  backgroundColor: "white",
+                  pt: 2,
                 }}
               >
                 {getBookStatus(book).label === "貸出可能" && (
