@@ -38,28 +38,30 @@ export const fetchBooksByTitle = async (title: string): Promise<BookInfo[]> => {
     );
     const data = response.data;
     if (data.items && data.items.length > 0) {
-      return data.items.map((item) => {
-        const bookInfo = item.volumeInfo;
-        const isbnInfo = bookInfo.industryIdentifiers?.find(
-          (identifier) => identifier.type === "ISBN_13",
-        );
-        return {
-          imagePath:
-            bookInfo.imageLinks?.thumbnail ||
-            "/src/assets/book-open-svgrepo-com.svg",
-          title: bookInfo.title,
-          authors: bookInfo.authors || ["Unknown Author"],
-          isbn: isbnInfo?.identifier,
-          publishedDate: bookInfo.publishedDate,
-          description: bookInfo.description,
-        };
-      });
+      return data.items
+        .map((item) => {
+          const bookInfo = item.volumeInfo;
+          const isbnInfo = bookInfo.industryIdentifiers?.find(
+            (identifier) => identifier.type === "ISBN_13",
+          );
+          return {
+            imagePath:
+              bookInfo.imageLinks?.thumbnail ||
+              "/src/assets/book-open-svgrepo-com.svg",
+            title: bookInfo.title,
+            authors: bookInfo.authors || ["Unknown Author"],
+            isbn: isbnInfo?.identifier,
+            publishedDate: bookInfo.publishedDate,
+            description: bookInfo.description,
+          };
+        })
+        .filter((book) => book.isbn); // ISBNが存在しない本をフィルタリング
     } else {
       throw new Error("Books not found");
     }
   } catch (error) {
     console.error("Error fetching books data:", error);
-    throw error;
+    throw new Error("Error fetching books data");
   }
 };
 
@@ -75,13 +77,16 @@ export const fetchBooksByIsbn = async (isbn: string): Promise<BookInfo> => {
       const isbnInfo = bookInfo.industryIdentifiers?.find(
         (identifier) => identifier.type === "ISBN_13",
       );
+      if (!isbnInfo) {
+        throw new Error("ISBN not found for this book");
+      }
       return {
         imagePath:
           bookInfo.imageLinks?.thumbnail ||
           "/src/assets/book-open-svgrepo-com.svg",
         title: bookInfo.title,
         authors: bookInfo.authors || ["Unknown Author"],
-        isbn: isbnInfo?.identifier,
+        isbn: isbnInfo.identifier,
         publishedDate: bookInfo.publishedDate,
         description: bookInfo.description,
       };
@@ -90,6 +95,6 @@ export const fetchBooksByIsbn = async (isbn: string): Promise<BookInfo> => {
     }
   } catch (error) {
     console.error("Error fetching book data:", error);
-    throw error;
+    throw new Error("Error fetching book data");
   }
 };

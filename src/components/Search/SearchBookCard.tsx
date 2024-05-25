@@ -25,7 +25,6 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
   book,
   userId,
 }) => {
-  // userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -80,7 +79,6 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
   };
 
   const getBookStatus = (book: Book) => {
-    // リクエスト中、所持中追加ロジック追加
     const latestBookRequest = book.latest_book_request;
     const latestBookLoan = book.latest_book_loan;
 
@@ -133,7 +131,6 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
         deadline: "\u00A0",
       };
     }
-    // ここまで
 
     if (!book.latest_book_loan) {
       if (book.latest_book_request) {
@@ -358,30 +355,29 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: "85%",
-              maxWidth: "850px",
+              maxWidth: "700px",
               height: "85%",
-              maxHeight: "92vh",
+              maxHeight: "85vh",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              flexDirection: "column",
+              overflow: "hidden",
             }}
           >
             <Paper
               sx={{
-                p: 4,
+                p: 3,
                 borderRadius: "10px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 width: "100%",
                 height: "100%",
-                overflow: "hidden",
               }}
             >
               <Box
                 sx={{
                   width: "100%",
-                  height: "60%",
+                  flex: "0 0 auto",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -393,7 +389,7 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
                   sx={{
                     objectFit: "contain",
                     width: "100%",
-                    height: "100%",
+                    maxHeight: "200px", // 画像の最大高さを制限
                   }}
                   image={book.book_information.image_path}
                   alt={book.book_information.title}
@@ -410,7 +406,7 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
               <Box
                 sx={{
                   width: "100%",
-                  height: "15%",
+                  flex: "1 1 auto",
                   overflowY: "auto",
                   mb: 2,
                   borderRadius: "4px",
@@ -451,11 +447,11 @@ export const SearchBookCard: React.FC<SearchBookCardProps> = ({
               </Typography>
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "stretch",
                   width: "100%",
-                  mt: "auto",
+                  position: "sticky",
+                  bottom: 0,
+                  backgroundColor: "white",
+                  pt: 2,
                 }}
               >
                 {getBookStatus(book).label === "貸出可能" && (
