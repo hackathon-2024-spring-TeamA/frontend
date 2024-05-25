@@ -19,6 +19,7 @@ import RequestDetailPage from "./pages/request/RequestDetailPage";
 import LoanConfirmationPage from "./pages/search/LoanConfirmationPage";
 import NoLoginSearchBooksPage from "./pages/search/NoLoginSearchBooksPage";
 import SearchBooksPage from "./pages/search/SearchBooksPage";
+import UserPage from "./pages/user/UserPage";
 
 import MainLayout from "@/components/Layout/MainLayout";
 import MockAboutPage from "@/pages/mock/MockAboutPage";
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
         <Route path="home" element={<SearchBooksPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="about" element={<AboutPage />} />
+        <Route path="setting" element={<UserPage />} />
         <Route path="confirm-loan" element={<LoanConfirmationPage />} />
         <Route path="donation">
           {/* 寄付機能 PATH */}
