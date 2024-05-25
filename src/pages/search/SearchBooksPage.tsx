@@ -5,7 +5,13 @@ import {
   withAuthenticator,
   WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
-import { Box, Grid, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  CircularProgress,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { PaginationComponent } from "../../components/Common/Pagination";
@@ -16,7 +22,6 @@ import AlertSnackbar from "@/components/SnackBar/AlertSnackBar";
 import { SEARCH_BOOKS } from "@/features/search/queries";
 import { GET_USER_NICKNAME } from "@/features/user/queries";
 import { SearchPaginationData } from "@/types/interface";
-
 import "@aws-amplify/ui-react/styles.css";
 
 const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
@@ -34,15 +39,18 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [showAvailableOnly, setShowAvailableOnly] = useState(false);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
   console.log(user?.userId);
+
   const { data: userNicknameData } = useQuery(GET_USER_NICKNAME, {
     variables: { userId: user?.userId },
   });
+
   const nickname = userNicknameData?.getUserNickname;
   console.log(nickname);
 
@@ -72,6 +80,12 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
     setCurrentPage(1);
   };
 
+  const handleShowAvailableOnlyChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setShowAvailableOnly(event.target.checked);
+  };
+
   if (!user) {
     return <div>Hello</div>;
   }
@@ -83,6 +97,18 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
           <SearchInput
             searchQuery={searchQuery}
             onSearchChange={handleSearchChange}
+          />
+        </Box>
+        <Box mb={2}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showAvailableOnly}
+                onChange={handleShowAvailableOnlyChange}
+                color="primary"
+              />
+            }
+            label="貸出可能の本のみを表示"
           />
         </Box>
         <Box bgcolor="grey.100" p={4} borderRadius="10px">
@@ -120,4 +146,5 @@ const SearchBooksPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
 };
 
 const SearchBooksPageWithAuthenticator = withAuthenticator(SearchBooksPage);
+
 export default SearchBooksPageWithAuthenticator;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   withAuthenticator,
-  // WithAuthenticatorProps,
+  WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
 import {
   Box,
@@ -20,12 +20,12 @@ import { ConfirmationModal } from "@/components/Common/ConfirmationModal";
 import { UPDATE_BOOK_REQUEST_STATUS } from "@/features/request/mutations";
 import { GET_BOOK_REQUEST } from "@/features/request/queries";
 
-const RequestDetailPage: React.FC = () => {
+const RequestDetailPage: React.FC<WithAuthenticatorProps> = ({ user }) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const requestId = searchParams.get("requestId");
 
-  const userId = "a1b2c3d4-e5f6-7890-1234-567890abcdef"; // ログインユーザーのIDに置き換える
+  const userId = user?.userId;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
